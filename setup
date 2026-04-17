@@ -1,0 +1,235 @@
+#!/usr/bin/env bash
+# TAS install script — symlinks skills/ into ~/.claude/skills/
+#
+# Usage:
+#   ./setup              Install or refresh symlinks for every skill in skills/
+#   ./setup --sync       git pull --ff-only, then refresh + prune
+#   ./setup --prune      Remove dangling symlinks pointing into this repo
+#   ./setup --uninstall  Remove all TAS symlinks from ~/.claude/skills/
+#   ./setup --dry-run    Print what would happen without making changes
+#   ./setup --list       Show current symlink status per skill
+#
+# Combine --dry-run with any other flag.
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+SKILLS_SRC="$REPO_DIR/skills"
+SKILLS_DST="${HOME}/.claude/skills"
+
+DRY_RUN=0
+MODE="install"
+
+for arg in "$@"; do
+  case "$arg" in
+    --sync)      MODE="sync" ;;
+    --prune)     MODE="prune" ;;
+    --uninstall) MODE="uninstall" ;;
+    --list)      MODE="list" ;;
+    --dry-run)   DRY_RUN=1 ;;
+    -h|--help)
+      sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "error: unknown flag: $arg" >&2
+      exit 2
+      ;;
+  esac
+done
+
+log() { printf '%s\n' "$*"; }
+run() {
+  if [ "$DRY_RUN" -eq 1 ]; then
+    log "  [dry-run] $*"
+  else
+    "$@"
+  fi
+}
+
+ensure_dst_dir() {
+  if [ ! -d "$SKILLS_DST" ]; then
+    log "creating $SKILLS_DST"
+    run mkdir -p "$SKILLS_DST"
+  fi
+}
+
+# List every skill directory (not .gitkeep, not hidden) in skills/
+list_skills() {
+  [ -d "$SKILLS_SRC" ] || return 0
+  for entry in "$SKILLS_SRC"/*/; do
+    [ -d "$entry" ] || continue
+    basename "$entry"
+  done
+}
+
+# Check if a symlink points into this repo (safe to touch)
+points_into_repo() {
+  local link="$1"
+  [ -L "$link" ] || return 1
+  local target
+  target="$(readlink "$link")"
+  case "$target" in
+    "$REPO_DIR"/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+install_skill() {
+  local name="$1"
+  local src="$SKILLS_SRC/$name"
+  local dst="$SKILLS_DST/$name"
+
+  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    log "  SKIP $name — $dst exists and is not a symlink (will not overwrite)"
+    return 1
+  fi
+
+  if [ -L "$dst" ]; then
+    if points_into_repo "$dst"; then
+      run rm "$dst"
+    else
+      log "  SKIP $name — $dst is a symlink but points outside this repo"
+      return 1
+    fi
+  fi
+
+  run ln -s "$src" "$dst"
+  log "  LINK $name"
+  return 0
+}
+
+prune_dangling() {
+  [ -d "$SKILLS_DST" ] || return 0
+  local removed=0
+  for link in "$SKILLS_DST"/*; do
+    [ -L "$link" ] || continue
+    points_into_repo "$link" || continue
+    if [ ! -e "$link" ]; then
+      run rm "$link"
+      log "  PRUNE $(basename "$link") (dangling)"
+      removed=$((removed + 1))
+    fi
+  done
+  echo "$removed"
+}
+
+uninstall_all() {
+  [ -d "$SKILLS_DST" ] || return 0
+  local removed=0
+  for link in "$SKILLS_DST"/*; do
+    [ -L "$link" ] || continue
+    points_into_repo "$link" || continue
+    run rm "$link"
+    log "  UNLINK $(basename "$link")"
+    removed=$((removed + 1))
+  done
+  echo "$removed"
+}
+
+do_install() {
+  ensure_dst_dir
+  local n=0 s=0
+  local found_any=0
+  while IFS= read -r name; do
+    found_any=1
+    if install_skill "$name"; then
+      n=$((n + 1))
+    else
+      s=$((s + 1))
+    fi
+  done < <(list_skills)
+
+  if [ "$found_any" -eq 0 ]; then
+    log "no skills found in $SKILLS_SRC"
+  fi
+  log "done: $n linked, $s skipped"
+}
+
+do_sync() {
+  log "syncing TAS from origin..."
+  local old_sha new_sha
+  old_sha="$(git -C "$REPO_DIR" rev-parse HEAD)"
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    log "  [dry-run] git -C $REPO_DIR fetch origin"
+    log "  [dry-run] git -C $REPO_DIR pull --ff-only"
+  else
+    if ! git -C "$REPO_DIR" fetch origin; then
+      log "error: git fetch failed — aborting before touching symlinks"
+      exit 1
+    fi
+    if ! git -C "$REPO_DIR" pull --ff-only; then
+      log "error: git pull --ff-only failed (diverged branches or uncommitted changes)"
+      log "       resolve manually, then re-run ./setup --sync"
+      exit 1
+    fi
+  fi
+
+  new_sha="$(git -C "$REPO_DIR" rev-parse HEAD)"
+
+  do_install
+  local pruned
+  pruned="$(prune_dangling | tail -n 1)"
+
+  if [ "$old_sha" = "$new_sha" ]; then
+    log "version: $old_sha (already up to date)"
+  else
+    log "version: $old_sha → $new_sha"
+  fi
+  log "pruned: $pruned dangling"
+}
+
+do_list() {
+  ensure_dst_dir
+  log "TAS skills status:"
+
+  while IFS= read -r name; do
+    local dst="$SKILLS_DST/$name"
+    if [ -L "$dst" ] && points_into_repo "$dst"; then
+      if [ -e "$dst" ]; then
+        log "  OK       $name → $(readlink "$dst")"
+      else
+        log "  DANGLING $name → $(readlink "$dst")"
+      fi
+    elif [ -e "$dst" ]; then
+      log "  CONFLICT $name (exists but not a TAS symlink)"
+    else
+      log "  MISSING  $name (not installed — run ./setup)"
+    fi
+  done < <(list_skills)
+
+  # Also surface dangling symlinks that no longer have a skill dir in repo
+  if [ -d "$SKILLS_DST" ]; then
+    for link in "$SKILLS_DST"/*; do
+      [ -L "$link" ] || continue
+      points_into_repo "$link" || continue
+      local bn
+      bn="$(basename "$link")"
+      if [ ! -d "$SKILLS_SRC/$bn" ]; then
+        log "  DANGLING $bn → $(readlink "$link") (skill removed from repo — run ./setup --prune)"
+      fi
+    done
+  fi
+}
+
+case "$MODE" in
+  install)
+    do_install
+    ;;
+  sync)
+    do_sync
+    ;;
+  prune)
+    ensure_dst_dir
+    pruned="$(prune_dangling | tail -n 1)"
+    log "done: $pruned dangling symlinks removed"
+    ;;
+  uninstall)
+    removed="$(uninstall_all | tail -n 1)"
+    log "done: $removed symlinks removed"
+    ;;
+  list)
+    do_list
+    ;;
+esac
