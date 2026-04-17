@@ -1,10 +1,10 @@
 ---
-name: apple-app-market-scan
+name: ios-macos-app-market-research
 description: >
   Two modes:
   (1) With keyword: scan App Store rankings, Product Hunt launches, and
   web sources for a specific Apple app category. Produces a facts-only
-  market report to .research/apple-app/.
+  market report to .research/ios-macos-app/.
   (2) Without keyword: broad discovery across App Store categories to
   identify underserved niches, emerging opportunities, and promising
   domains on the Apple platform. Recommends fields to explore.
@@ -16,10 +16,10 @@ version: 0.1.0
 argument-hint: "[category-keyword] [region]  — omit keyword for discovery mode"
 disable-model-invocation: true
 metadata:
-  domain: apple-app
+  domain: ios-macos-app
 ---
 
-# apple-app-market-scan
+# ios-macos-app-market-research
 
 Scan the Apple app landscape. Two modes depending on whether a keyword is provided.
 
@@ -50,7 +50,7 @@ Decide mode from arguments:
 
 ### Steps
 
-1. Ensure `.research/apple-app/` exists in the current project root. Create it if missing.
+1. Ensure `.research/ios-macos-app/` exists in the current project root. Create it if missing.
 2. Search these sources, in order:
    - App Store top charts and search results for the category (via web search).
    - Product Hunt launches in the category over the last 6 months.
@@ -62,7 +62,7 @@ Decide mode from arguments:
    - Platforms supported (iPhone / iPad / Watch / Vision Pro / Mac).
    - Apple frameworks used (if identifiable from the listing, screenshots, or reviews).
    - Last update date (if available).
-4. Write the report to `.research/apple-app/market-scan-{keyword}-{YYYY-MM-DD}.md`.
+4. Write the report to `.research/ios-macos-app/market-scan-{keyword}-{YYYY-MM-DD}.md`.
 
 ### Report structure
 
@@ -106,7 +106,7 @@ Sources searched: {list with URLs}
 
 ### Steps
 
-1. Ensure `.research/apple-app/` exists in the current project root. Create it if missing.
+1. Ensure `.research/ios-macos-app/` exists in the current project root. Create it if missing.
 2. Search broadly:
    - App Store category-level trends — which categories are growing, which are saturated.
    - Recent WWDC announcements and new Apple framework capabilities → categories where new APIs create opportunity.
@@ -119,7 +119,7 @@ Sources searched: {list with URLs}
    - **Framework opportunity**: new or underutilized Apple frameworks (e.g., Apple Intelligence APIs launched but few apps use them).
    - **Indie viability**: categories where solo developers or small teams can compete.
    - **Monetization clarity**: categories where users are accustomed to paying.
-4. Write the report to `.research/apple-app/market-discovery-{YYYY-MM-DD}.md`.
+4. Write the report to `.research/ios-macos-app/market-discovery-{YYYY-MM-DD}.md`.
 
 ### Report structure
 
@@ -144,7 +144,7 @@ Pick 3–5 categories from the table above. For each:
 - URL for every claim.
 
 ## Next step
-To deep-dive into a specific category, run `/apple-app-market-scan {category}`.
+To deep-dive into a specific category, run `/ios-macos-app-market-research {category}`.
 ```
 
 ### Constraints (discovery mode)

@@ -1,8 +1,8 @@
 ---
-name: apple-app-idea-explore
+name: ios-macos-app-idea-explore
 description: >
   Ideation-phase skill for crystallizing Apple app concepts.
-  Strongly coupled with apple-app-market-scan: uses market research
+  Strongly coupled with ios-macos-app-market-research: uses market research
   artifacts as primary grounding for Socratic exploration.
   Iteratively refines an idea through forcing questions, assumption
   surfacing, and convergence tracking until the concept is crystallized.
@@ -11,19 +11,19 @@ description: >
   and platform-specific constraints throughout.
   Pipeline: market-scan → idea-explore → /plan → (future: design,
   engineering, decision-making skills).
-  NOT for: market research (use apple-app-market-scan), technical
+  NOT for: market research (use ios-macos-app-market-research), technical
   architecture, UI design, or implementation planning.
 version: 0.1.0
 argument-hint: "[rough idea in quotes]"
 disable-model-invocation: true
 metadata:
-  domain: apple-app
+  domain: ios-macos-app
   pipeline-position: ideation
-  upstream: apple-app-market-scan
+  upstream: ios-macos-app-market-research
   downstream: /plan
 ---
 
-# apple-app-idea-explore
+# ios-macos-app-idea-explore
 
 Crystallize a rough Apple app idea through iterative Socratic exploration.
 
@@ -34,9 +34,9 @@ This skill asks. It does not propose. Your judgment stays with you.
 
 ## Pipeline position
 
-`apple-app-market-scan` (discovery/focused) → **`apple-app-idea-explore`** → `/plan` → (future: design, engineering, decision skills).
+`ios-macos-app-market-research` (discovery/focused) → **`ios-macos-app-idea-explore`** → `/plan` → (future: design, engineering, decision skills).
 
-This skill expects market research artifacts from `apple-app-market-scan` as its grounding. Without them, it operates in a degraded mode with explicit warnings.
+This skill expects market research artifacts from `ios-macos-app-market-research` as its grounding. Without them, it operates in a degraded mode with explicit warnings.
 
 ## Implementation approach
 
@@ -83,16 +83,16 @@ After each iteration, assess each track. Convergence = all 6 tracks stable. Stag
 
 ## Phase 0 — Artifact discovery (first iteration only)
 
-Glob `.research/apple-app/market-scan-*.md` AND `.research/apple-app/market-discovery-*.md`.
+Glob `.research/ios-macos-app/market-scan-*.md` AND `.research/ios-macos-app/market-discovery-*.md`.
 
 - **If focused market scan found** (strong path): read the most recent of each type. State:
   > "Market research loaded: `{filename}`. {N} apps catalogued in {category}. Platform gaps identified: {list}. This data will ground the exploration."
 
 - **If only discovery report found**: State:
-  > "Discovery report loaded: `{filename}`. Promising domains identified: {list}. No focused scan for this specific category — consider running `/apple-app-market-scan {keyword}` first for stronger grounding."
+  > "Discovery report loaded: `{filename}`. Promising domains identified: {list}. No focused scan for this specific category — consider running `/ios-macos-app-market-research {keyword}` first for stronger grounding."
 
 - **If nothing found** (degraded path — warn explicitly):
-  > "⚠️ No market research found in `.research/apple-app/`. This skill works best with market data from `/apple-app-market-scan`. Proceeding without market grounding — all competitive claims will be unvalidated assumptions. Strongly consider running market scan first."
+  > "⚠️ No market research found in `.research/ios-macos-app/`. This skill works best with market data from `/ios-macos-app-market-research`. Proceeding without market grounding — all competitive claims will be unvalidated assumptions. Strongly consider running market scan first."
 
 ---
 
@@ -139,7 +139,7 @@ While asking:
 
 ## Phase 2 — Crystallize + progress assessment
 
-Overwrite (same filename each iteration): `.research/apple-app/idea-exploration-{slug}-{YYYY-MM-DD}.md`.
+Overwrite (same filename each iteration): `.research/ios-macos-app/idea-exploration-{slug}-{YYYY-MM-DD}.md`.
 
 ### Document template
 
@@ -148,7 +148,7 @@ Overwrite (same filename each iteration): `.research/apple-app/idea-exploration-
 Date: {YYYY-MM-DD}
 Iteration: {N}
 Market research: {filename or "None"}
-Pipeline: apple-app-market-scan → **apple-app-idea-explore** → /plan
+Pipeline: ios-macos-app-market-research → **ios-macos-app-idea-explore** → /plan
 
 ## Idea in one sentence
 {synthesized — refined each iteration}
@@ -181,7 +181,7 @@ Pipeline: apple-app-market-scan → **apple-app-idea-explore** → /plan
 
 ## Market context
 {if report loaded: key facts, platform gaps, framework opportunities, competitive landscape — all from report with source URLs}
-{if no report: "No market data. Run /apple-app-market-scan before trusting competitive claims."}
+{if no report: "No market data. Run /ios-macos-app-market-research before trusting competitive claims."}
 
 ## Contradictions noted
 {user claims vs. market data, listed factually — do not resolve them}

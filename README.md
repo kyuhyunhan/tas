@@ -25,8 +25,8 @@ Skills install as symlinks from the repo into `~/.claude/skills/`. Editing a ski
 
 | Name | Domain | Purpose |
 |------|--------|---------|
-| `apple-app-market-scan` | apple-app | Scan Apple app categories for market facts or discover underserved niches |
-| `apple-app-idea-explore` | apple-app | Iteratively crystallize an Apple app concept through Socratic interview grounded in market research |
+| `ios-macos-app-market-research` | ios-macos-app | Conversational researcher for iOS and macOS desktop app markets |
+| `ios-macos-app-idea-explore` | ios-macos-app | Iteratively crystallize an iOS or macOS app concept through Socratic interview |
 
 ## Authoring a new skill
 

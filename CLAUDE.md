@@ -32,7 +32,7 @@ version: 0.1.0
 argument-hint: "[optional args hint]"
 disable-model-invocation: true
 metadata:
-  domain: apple-app
+  domain: ios-macos-app
 ---
 ```
 
@@ -45,12 +45,12 @@ Optional fields:
 - `argument-hint`: Claude Code native field. One-line hint shown to the user when invoking the skill.
 - `disable-model-invocation`: Claude Code native field. Set `true` when a skill should be invoked explicitly by the user, not auto-routed by the model.
 - `metadata`: Custom namespace for TAS-specific fields. Current conventions:
-  - `metadata.domain`: domain prefix grouping skills that share artifacts (e.g., `apple-app` for `apple-app-market-scan`, `apple-app-idea-explore`).
+  - `metadata.domain`: domain prefix grouping skills that share artifacts (e.g., `ios-macos-app` for `ios-macos-app-market-research`, `ios-macos-app-idea-explore`).
   - `metadata.pipeline-position`, `metadata.upstream`, `metadata.downstream`: pipeline wiring hints when a skill chains with others.
 
 ## Skill naming
 
-Prefix skills with their domain: `{domain}-{action}`. Example: `apple-app-market-scan`, `apple-app-idea-explore`. Domain prefixes prevent collisions when TAS later adds new domains (`web-saas-`, `hardware-`, etc.).
+Prefix skills with their domain: `{domain}-{action}`. Example: `ios-macos-app-market-research`, `ios-macos-app-idea-explore`. Domain prefixes prevent collisions when TAS later adds new domains (`web-saas-`, `hardware-`, etc.).
 
 ## Artifact convention
 
