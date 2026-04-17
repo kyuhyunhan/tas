@@ -1,42 +1,44 @@
 ---
 name: ios-macos-app-idea-explore
 description: >
-  Ideation-phase skill for crystallizing Apple app concepts.
-  Strongly coupled with ios-macos-app-market-research: uses market research
-  artifacts as primary grounding for Socratic exploration.
+  Ideation-phase skill for crystallizing iOS or macOS app concepts.
   Iteratively refines an idea through forcing questions, assumption
   surfacing, and convergence tracking until the concept is crystallized.
-  Apple-ecosystem-aware: considers App Store guidelines, platform
-  capabilities (iOS/iPadOS/watchOS/visionOS/macOS), Apple frameworks,
-  and platform-specific constraints throughout.
-  Pipeline: market-scan → idea-explore → /plan → (future: design,
-  engineering, decision-making skills).
-  NOT for: market research (use ios-macos-app-market-research), technical
-  architecture, UI design, or implementation planning.
-version: 0.1.0
+  Scope strictly: iOS (iPhone/iPad) and macOS desktop apps. Excludes
+  watchOS, visionOS, tvOS.
+  Pipeline: idea-explore → /plan → (future: design, engineering,
+  decision-making skills). Does NOT depend on any other skill — starts
+  directly from the user's rough idea.
+  NOT for: market research (market-research skill is isolated and separate),
+  technical architecture, UI design, or implementation planning.
+version: 0.2.0
 argument-hint: "[rough idea in quotes]"
 disable-model-invocation: true
 metadata:
   domain: ios-macos-app
   pipeline-position: ideation
-  upstream: ios-macos-app-market-research
   downstream: /plan
 ---
 
 # ios-macos-app-idea-explore
 
-Crystallize a rough Apple app idea through iterative Socratic exploration.
+Crystallize a rough iOS or macOS app idea through iterative Socratic exploration.
 
 This skill asks. It does not propose. Your judgment stays with you.
 - Do not propose features, solutions, or technical approaches.
 - Do not evaluate the idea as good or bad.
 - Output is a structured exploration document, not a recommendation.
 
+## Scope
+
+**In scope**: iOS (iPhone, iPad) and macOS desktop apps.
+**Out of scope**: watchOS, visionOS, tvOS. If the user proposes an idea that centers on an out-of-scope platform, ask them to reframe for iOS/macOS or step outside this skill.
+
 ## Pipeline position
 
-`ios-macos-app-market-research` (discovery/focused) → **`ios-macos-app-idea-explore`** → `/plan` → (future: design, engineering, decision skills).
+**`ios-macos-app-idea-explore`** → `/plan` → (future: design, engineering, decision skills).
 
-This skill expects market research artifacts from `ios-macos-app-market-research` as its grounding. Without them, it operates in a degraded mode with explicit warnings.
+This skill starts directly from the user's rough idea. It does not load external market research or other artifacts. Whatever context the user brings in their head is the starting point.
 
 ## Implementation approach
 
@@ -49,9 +51,6 @@ Prompt-only. No code, no state files, no metrics.
 ## Convergence loop
 
 ```
-Phase 0 (first iteration only): artifact discovery
-        │
-        ▼
 Phase 1: Socratic interview ◄───── re-read document,
         │                           focus on tracks with
         ▼                           lowest clarity
@@ -75,24 +74,9 @@ After each iteration, assess each track. Convergence = all 6 tracks stable. Stag
 | Problem clarity | How specific is the problem + who has it | New nuance, narrower framing | Same statement, no refinement |
 | Assumption coverage | Confirmed vs. total assumptions | Moving from unconfirmed → confirmed/contradicted | Same assumptions stuck on "unconfirmed" for 2+ rounds |
 | Scope stability | Boundary changes | Held or narrowed intentionally | Keeps expanding without resolution |
-| Alternative awareness | Competitive landscape understanding | New alternatives or sharper differentiation | "I don't know what else exists" despite market data being available |
+| Alternative awareness | Competitive landscape understanding | New alternatives or sharper differentiation | "I don't know what else exists" persists |
 | Kill condition clarity | Biggest-risk identification | Specific and testable | Vague ("it might not work") |
-| Apple platform fit | Why this must be a native Apple app | Platform choice tied to Apple capabilities | "iPhone I guess" or no answer to "why not web?" |
-
----
-
-## Phase 0 — Artifact discovery (first iteration only)
-
-Glob `.research/ios-macos-app/market-scan-*.md` AND `.research/ios-macos-app/market-discovery-*.md`.
-
-- **If focused market scan found** (strong path): read the most recent of each type. State:
-  > "Market research loaded: `{filename}`. {N} apps catalogued in {category}. Platform gaps identified: {list}. This data will ground the exploration."
-
-- **If only discovery report found**: State:
-  > "Discovery report loaded: `{filename}`. Promising domains identified: {list}. No focused scan for this specific category — consider running `/ios-macos-app-market-research {keyword}` first for stronger grounding."
-
-- **If nothing found** (degraded path — warn explicitly):
-  > "⚠️ No market research found in `.research/ios-macos-app/`. This skill works best with market data from `/ios-macos-app-market-research`. Proceeding without market grounding — all competitive claims will be unvalidated assumptions. Strongly consider running market scan first."
+| iOS/macOS platform fit | Why this must be a native iOS or macOS app | Platform choice tied to specific iOS or macOS capabilities | "iPhone I guess" with no reasoning, or no answer to "why not web, why not macOS too?" |
 
 ---
 
@@ -102,20 +86,20 @@ Rules:
 - Ask questions **ONE AT A TIME**. Wait for the user's response before asking the next.
 - After each answer, identify ONE hidden assumption and surface it as the next question.
 - After 3 confident answers without pushback, ask: "You've answered confidently. What's the part you're least sure about?" (dialectic guard).
-- At least once per iteration, probe Apple platform fit: does this idea genuinely benefit from being native Apple, or would web/cross-platform serve better?
+- At least once per iteration, probe iOS/macOS platform fit: does this idea genuinely benefit from being a native iOS or macOS app, or would a web app or cross-platform solution serve better?
 
 ### First iteration — eight forcing question categories
 
 | # | Category | Example |
 |---|----------|---------|
 | 1 | Problem | "What specific frustration does this address? For whom exactly?" |
-| 2 | Current alternatives | "How do people solve this today without your app? What's inadequate?" (If market scan loaded: "The scan shows {App X}, {App Y} in this space. Which comes closest to what you envision, and where does it fall short?") |
+| 2 | Current alternatives | "How do people solve this today without your app? What's inadequate? What other apps in this space have you looked at?" |
 | 3 | Hidden capability | "What can this do that you haven't stated yet? What's the 10x version?" |
 | 4 | Scope boundary | "What is explicitly NOT part of this? What would you refuse to build?" |
 | 5 | Kill condition | "What assumption, if wrong, kills this idea on arrival?" |
 | 6 | Measurement | "How would you know this succeeded? One number after 3 months?" |
-| 7 | Apple platform fit | "Which Apple platforms does this need? iPhone-only, or Watch/iPad/Vision Pro? Why?" (If market scan shows platform gaps: "The scan shows no competitor targets {platform}. Is that a gap you'd exploit or a signal that platform doesn't fit?") |
-| 8 | Apple framework leverage | "Are there Apple-specific capabilities (HealthKit, ARKit, Shortcuts, Live Activities, Apple Intelligence) that make this fundamentally better than a web app?" (If market scan flagged framework opportunities: reference them directly.) |
+| 7 | iOS/macOS platform fit | "iOS, macOS, or both? Why? And why not web instead?" |
+| 8 | Apple framework leverage | "Are there Apple-specific capabilities (HealthKit, Shortcuts via App Intents, Live Activities, Apple Intelligence, Mac Catalyst, SwiftUI, CoreML) that make this fundamentally better than a web app or cross-platform solution?" |
 
 ### Subsequent iterations — targeted refinement
 
@@ -125,7 +109,6 @@ Before asking anything:
 3. Prioritize questions that address those tracks' open gaps.
 
 While asking:
-- Cross-reference market scan on every iteration. If the user's claim contradicts the scan data, surface that immediately.
 - If a track is stagnant, try a **lateral question**: reframe from a different angle rather than repeating the same approach.
 - Do NOT repeat questions already answered unless the user's responses revealed new territory.
 - Fewer questions per iteration as convergence approaches: 8–10 in round 1, potentially 4–5 in later rounds.
@@ -147,8 +130,7 @@ Overwrite (same filename each iteration): `.research/ios-macos-app/idea-explorat
 # Idea Exploration: {name}
 Date: {YYYY-MM-DD}
 Iteration: {N}
-Market research: {filename or "None"}
-Pipeline: ios-macos-app-market-research → **ios-macos-app-idea-explore** → /plan
+Pipeline: **ios-macos-app-idea-explore** → /plan
 
 ## Idea in one sentence
 {synthesized — refined each iteration}
@@ -159,11 +141,11 @@ Pipeline: ios-macos-app-market-research → **ios-macos-app-idea-explore** → /
 ## Target user
 {from interview}
 
-## Apple platform strategy
-**Target platforms**: {iOS / iPadOS / watchOS / visionOS / macOS — with rationale per platform}
-**Key Apple frameworks**: {HealthKit / ARKit / etc. — only those actually relevant}
-**Why native Apple?**: {the specific reason this should be an Apple app, not web/cross-platform}
-**App Store considerations**: {pricing model, review guideline risks, editorial opportunity}
+## Platform strategy
+**Target platforms**: iOS / macOS / both (with rationale for each platform chosen)
+**Key Apple frameworks**: {UIKit / SwiftUI / AppKit / HealthKit / App Intents / CoreML / etc. — only those actually relevant}
+**Why native (not web)?**: {the specific reason this should be an iOS or macOS app, not a web app or cross-platform solution}
+**App Store considerations**: {pricing model, review guideline risks, editorial opportunity, MAS vs. direct distribution for Mac}
 
 ## Assumptions surfaced
 1. {assumption} — confirmed / unconfirmed / contradicted by research
@@ -179,13 +161,6 @@ Pipeline: ios-macos-app-market-research → **ios-macos-app-idea-explore** → /
 - {unresolved — should shrink with each iteration}
 - {flag questions that require design phase vs. engineering phase to answer}
 
-## Market context
-{if report loaded: key facts, platform gaps, framework opportunities, competitive landscape — all from report with source URLs}
-{if no report: "No market data. Run /ios-macos-app-market-research before trusting competitive claims."}
-
-## Contradictions noted
-{user claims vs. market data, listed factually — do not resolve them}
-
 ## Progress ledger
 | Track | Status | Delta from last iteration |
 |-------|--------|---------------------------|
@@ -194,7 +169,7 @@ Pipeline: ios-macos-app-market-research → **ios-macos-app-idea-explore** → /
 | Scope stability | {stable/shifting} | {what moved} |
 | Alternative awareness | {progressing/stable/stagnant} | {what changed} |
 | Kill condition clarity | {clear/vague} | {what changed} |
-| Apple platform fit | {clear/unclear} | {what changed} |
+| iOS/macOS platform fit | {clear/unclear} | {what changed} |
 ```
 
 ---
@@ -252,7 +227,6 @@ Some tracks improved, others remain open.
 - Do NOT propose solutions, features, or technical approaches.
 - Do NOT evaluate the idea as good or bad.
 - Do NOT skip the signal + user decision. Always let the user decide.
-- If the user contradicts market data, note factually. Do not resolve.
 - Each iteration overwrites the same file. No versioned copies.
 - Maximum 7 iterations hard cap.
 - Output = structured exploration document, not a recommendation.
