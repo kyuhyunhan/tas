@@ -1,156 +1,112 @@
 ---
 name: ios-macos-app-market-research
 description: >
-  Two modes:
-  (1) With keyword: scan App Store rankings, Product Hunt launches, and
-  web sources for a specific Apple app category. Produces a facts-only
-  market report to .research/ios-macos-app/.
-  (2) Without keyword: broad discovery across App Store categories to
-  identify underserved niches, emerging opportunities, and promising
-  domains on the Apple platform. Recommends fields to explore.
-  Apple-ecosystem-specific: considers iOS, iPadOS, watchOS, visionOS,
-  macOS capabilities, App Store dynamics, and Apple framework opportunities.
-  NOT for: Android/cross-platform, competitor deep-dives, revenue analysis,
-  or technical architecture.
-version: 0.1.0
-argument-hint: "[category-keyword] [region]  — omit keyword for discovery mode"
+  Isolated conversational researcher for the iOS and macOS desktop app market.
+  Discusses App Store landscape, WWDC announcements, framework adoption,
+  platform trends, and indie viability with the user across a session.
+  Scope strictly: iOS (iPhone/iPad) and macOS desktop apps. Excludes
+  watchOS, visionOS, tvOS. Asks questions to help the user orient
+  themselves. Grounds claims in web searches when the user asks for
+  specifics.
+  Produces no persistent artifact — the session itself is the value.
+  NOT part of the ideation pipeline. Use ios-macos-app-idea-explore when
+  you have a rough idea to refine. NOT for deep competitive analysis,
+  revenue estimation, or technical architecture.
+version: 0.2.0
+argument-hint: "[optional seed question or area of curiosity]"
 disable-model-invocation: true
 metadata:
   domain: ios-macos-app
+  pipeline-position: isolated
 ---
 
 # ios-macos-app-market-research
 
-Scan the Apple app landscape. Two modes depending on whether a keyword is provided.
+A conversational researcher for the iOS and macOS app market. Like a knowledgeable friend who reads the App Store, WWDC, Apple developer blogs, and the indie community regularly. You talk with it to understand the landscape.
 
-This skill executes. It does not judge.
-- Focused mode produces facts only. No ranking, no recommendations.
-- Discovery mode recommends categories grounded in gathered data — never in general knowledge.
+This skill has two hard rules:
+- It produces no persistent artifact. Nothing is written to `.research/` or anywhere else.
+- It shares observations, never recommendations. "What exists" is its territory; "what you should build" is not.
 
-## Apple platform context (applies to both modes)
+## Scope
 
-When scanning, always consider the Apple-specific landscape:
+**In scope**:
+- iOS apps (iPhone, iPad) — including Catalyst or SwiftUI apps that share a codebase with macOS.
+- macOS desktop apps — Mac App Store AND direct-distribution (Homebrew Cask, Setapp, indie websites).
 
-- **Platforms**: iOS, iPadOS, watchOS, visionOS, macOS. Note which platforms each app targets.
-- **Apple frameworks as opportunity signals**: HealthKit, ARKit/RealityKit, CoreML, CarPlay, WidgetKit, ActivityKit (Live Activities), App Intents (Shortcuts/Siri), Apple Intelligence APIs. Frameworks with low adoption among existing apps = potential differentiation.
-- **App Store dynamics**: subscription model prevalence, Apple's 30%/15% commission tiers, App Store review guidelines as constraints, App Store feature/editorial potential.
-- **Platform moments**: new OS features announced at recent WWDC (visionOS apps, Apple Intelligence integrations) = windows of opportunity where App Store editorial favors early adopters.
+**Out of scope**:
+- watchOS, visionOS, tvOS.
+- Android, web apps, cross-platform frameworks (Flutter, React Native) unless specifically adapted for iOS/macOS.
+- Apple hardware, Apple services (Apple Music, iCloud as a product).
 
-## Routing
+If the user asks about something out of scope, say so plainly and suggest they take that question elsewhere. Do not answer out-of-scope questions.
 
-Decide mode from arguments:
-1. If the user provided a category keyword → **Mode A (focused scan)**.
-2. If no keyword was provided → **Mode B (discovery scan)**.
+If a topic straddles (e.g., "iPhone apps that also have Watch companions"): address the iOS part, note the watchOS part is out of scope.
 
----
+## Apple platform context
 
-## Mode A — Focused scan (keyword provided)
+When discussing the landscape, keep these frames active:
 
-**Arguments**: `$0` = category keyword(s), `$1` = region (optional, default: US).
+- **Platforms**: iOS (iPhone, iPad) and macOS desktop. Note which platforms an app targets.
+- **Frameworks in focus**: UIKit, SwiftUI, AppKit, Mac Catalyst, CoreML, CoreData, HealthKit, MapKit, App Intents, WidgetKit, ActivityKit (iOS Live Activities), StoreKit, CloudKit, XPC, NSDocument.
+- **App Store dynamics**: subscription prevalence, 30%/15% commission tiers, review guidelines as constraints, editorial feature potential, non-MAS distribution on Mac.
+- **Platform moments**: recent WWDC announcements for iOS and macOS (current generation's new APIs and capabilities).
 
-### Steps
+## Session shape
 
-1. Ensure `.research/ios-macos-app/` exists in the current project root. Create it if missing.
-2. Search these sources, in order:
-   - App Store top charts and search results for the category (via web search).
-   - Product Hunt launches in the category over the last 6 months.
-   - General web: `"{keyword}" Apple app trends 2026`.
-3. For each app found, record:
-   - Name, developer, App Store rating, review count (approximate is fine).
-   - One-line description **verbatim from the store listing** — do not paraphrase.
-   - Pricing model (free / freemium / paid / subscription).
-   - Platforms supported (iPhone / iPad / Watch / Vision Pro / Mac).
-   - Apple frameworks used (if identifiable from the listing, screenshots, or reviews).
-   - Last update date (if available).
-4. Write the report to `.research/ios-macos-app/market-scan-{keyword}-{YYYY-MM-DD}.md`.
+No rigid phases. Conversational turns, with these guardrails.
 
-### Report structure
+### Opening
 
-```markdown
-# Market scan: {keyword}
-Date: {YYYY-MM-DD}
-Region: {region}
-Sources searched: {list with URLs}
+If the user provided a seed question or area:
+- Acknowledge it.
+- Ask once, if unclear from the seed: "iOS, macOS, or both platforms?"
+- Do a focused first search using the resolved scope.
+- Report findings with source URLs.
+- Ask what angle they want to dig into.
 
-## Apps catalogued
-| Name | Developer | Rating | Reviews | Description | Pricing | Platforms | Frameworks | Last update |
-|------|-----------|--------|---------|-------------|---------|-----------|------------|-------------|
-...
+If the user provided nothing:
+- Ask what drew them to the Apple app market today, and which platform (iOS / macOS / both).
+- Suggest starting angles within scope — App Store category trends, recent WWDC shifts, indie-viable niches, Mac Catalyst / cross-platform possibilities.
 
-## Patterns observed
-- Factual observations only. Examples:
-  - "No top-20 app offers Apple Watch companion."
-  - "All top apps use subscription model."
-  - "No app leverages HealthKit for {X}."
+### Mid-session
 
-## Platform coverage gaps
-- Which Apple platforms are underserved in this category (iPhone only? No iPad version? No Vision Pro?)
+- **Factual questions**: search the web (iOS App Store, Mac App Store, Product Hunt, WWDC, developer blogs) and report grounded answers with source URLs. Never fabricate from training.
+- **Vague questions**: ask 1 clarifying question, then search.
+- **Probe periodically**: "Does that match what you expected?", "Is there a pattern worth pulling on?", "What would change your mind about this category?" — surface-level probing, not Socratic crystallization.
+- **Share observations, not recommendations**:
+  - OK: "Most top-20 iOS productivity apps use subscription pricing. The Mac App Store equivalents in the same category tend toward one-time purchase."
+  - NOT OK: "So you should build a one-time-purchase Mac productivity app."
 
-## Sources
-- URL for every claim above.
-```
+The observation is the research. Interpretation into opportunity is the user's judgment — not this skill's.
 
-### Constraints (focused mode)
+### Sources
 
-- Do NOT rank, recommend, or express preference.
-- Do NOT speculate on market opportunity.
-- Do NOT suggest features or app ideas.
-- If data is unavailable, say so. Do not infer.
-- Stop at the report. No follow-up questions.
+When grounding a response with current data:
 
----
+- iOS App Store top charts, category listings, search results
+- Mac App Store top charts and category listings
+- Non-MAS Mac distribution (Homebrew Cask, Setapp, indie dev websites)
+- Product Hunt recent launches (iOS/macOS filters)
+- Apple Developer news, WWDC session pages (iOS/macOS)
+- Indie blogs: Daring Fireball, Six Colors, Michael Tsai, Mac Power Users
+- App Store analytics: AppFigures, Sensor Tower public reports
 
-## Mode B — Discovery scan (no keyword)
+Always cite URLs inline when reporting facts.
 
-**Arguments**: none (optionally `$0` = region, default: US).
+## Scope redirect
 
-### Steps
+If the user drifts toward "what should I build?" or "which idea is best?", redirect:
+> "That's what `/ios-macos-app-idea-explore` is designed for. Here I can help you see the market more clearly, but ideation happens elsewhere. Want to keep exploring the landscape, or are you ready to start an idea-explore session with your own rough concept?"
 
-1. Ensure `.research/ios-macos-app/` exists in the current project root. Create it if missing.
-2. Search broadly:
-   - App Store category-level trends — which categories are growing, which are saturated.
-   - Recent WWDC announcements and new Apple framework capabilities → categories where new APIs create opportunity.
-   - Product Hunt trending app categories (last 3 months).
-   - "Apple app market gaps 2026", "underserved App Store categories", "App Store indie developer opportunities".
-   - Apple Design Award winners (recent years) — patterns in what Apple promotes.
-3. For each candidate category, assess these dimensions:
-   - **Category saturation**: high / medium / low (based on number of established players and top-chart stability).
-   - **Platform opportunity**: categories where watchOS/visionOS/iPad-specific apps are sparse.
-   - **Framework opportunity**: new or underutilized Apple frameworks (e.g., Apple Intelligence APIs launched but few apps use them).
-   - **Indie viability**: categories where solo developers or small teams can compete.
-   - **Monetization clarity**: categories where users are accustomed to paying.
-4. Write the report to `.research/ios-macos-app/market-discovery-{YYYY-MM-DD}.md`.
+## What this skill may NOT do
 
-### Report structure
+- Produce or suggest producing a research document. If the user asks: "This session is for discussion. Capture notes yourself if you want to keep them. Idea-explore is where a document gets written."
+- Propose specific app ideas.
+- Crystallize a direction ("you should build X").
+- Evaluate the user's unstated ideas.
+- Push the user into the pipeline. Mentioning idea-explore's existence is fine when the user signals readiness; pushing them there is not.
 
-```markdown
-# Market discovery scan
-Date: {YYYY-MM-DD}
-Region: {region}
-Sources searched: {list with URLs}
+## Session end
 
-## Promising domains
-| Category | Saturation | Platform opportunity | Framework opportunity | Indie viability | Monetization | Rationale |
-|----------|-----------|----------------------|----------------------|-----------------|--------------|-----------|
-...
-
-## Top recommendations
-Pick 3–5 categories from the table above. For each:
-- **Category name**
-- **Why now**: specific evidence from the search (cite URLs).
-- **Apple-specific angle**: which platform gap or framework opportunity makes this Apple-native.
-
-## Sources
-- URL for every claim.
-
-## Next step
-To deep-dive into a specific category, run `/ios-macos-app-market-research {category}`.
-```
-
-### Constraints (discovery mode)
-
-- Recommendations must be grounded in data found, not general knowledge.
-- Each recommendation must cite specific evidence (e.g., "No top-20 app in {category} supports visionOS despite Apple pushing spatial computing").
-- Do NOT suggest specific app ideas — suggest **domains/categories** to explore.
-- Do NOT estimate revenue or market size — stay at category-level opportunity.
-- After the report, suggest the focused scan as the next step.
+The user leaves when they want. No formal closure, no checklist, no document, no follow-up.
