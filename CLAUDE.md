@@ -30,6 +30,16 @@ TAS has two document types for behavior:
 
 If a new piece of work is itself atomic, it becomes a skill. If it only exists as the combination of other skills plus judgment, it becomes a recipe. When a skill grows workflow-like branches, split the workflow into a recipe and let the skill shrink back to a pure function.
 
+## Decision-point escape clause (main-grade skills)
+
+Main-grade skills (those that interview, crystallize, or otherwise drive a user through multi-round judgment) often reach points where the user lacks the domain knowledge to evaluate the options. When this happens:
+
+- Do NOT push the user to guess.
+- Do NOT paraphrase expert perspectives yourself — that outsources the user's thinking to the skill.
+- Pause the current skill, point the user to the [`consult-fan-out`](recipes/consult-fan-out.md) recipe, and resume by re-reading the skill's artifact plus any `.research/consult/response-*` artifacts the user brought back.
+
+Main skills must carry a short section that names this escape and names the `consult-*` lenses most likely to apply for that skill's decision points. See `skills/ios-macos-app-idea-explore/SKILL.md` for the canonical example.
+
 ## Skill format
 
 Each skill lives in `skills/{name}/SKILL.md` with YAML frontmatter.
