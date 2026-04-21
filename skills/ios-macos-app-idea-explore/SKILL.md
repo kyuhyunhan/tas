@@ -11,7 +11,7 @@ description: >
   directly from the user's rough idea.
   NOT for: market research (market-research skill is isolated and separate),
   technical architecture, UI design, or implementation planning.
-version: 0.2.0
+version: 0.3.0
 argument-hint: "[rough idea in quotes]"
 disable-model-invocation: true
 metadata:
@@ -117,6 +117,25 @@ While asking:
 
 - User says "enough" / expresses impatience → **escape hatch**: ask the 2–3 most critical remaining questions for the weakest tracks, acknowledge "Compressing — focusing on gaps that matter most", then proceed to Phase 2.
 - All eight categories covered for this iteration.
+
+### Decision-point escape — when the user lacks domain knowledge
+
+If the user signals they cannot evaluate the options for a question ("I don't know how to judge this", silence on a multiple-choice prompt, asking the skill for the answer), STOP the interview at that question. Do NOT push them to guess. Do NOT paraphrase expert perspectives yourself — that outsources their thinking.
+
+Point them to the [`consult-fan-out`](../../recipes/consult-fan-out.md) recipe. Suggest the likely lenses for each forcing-question category:
+
+| Category | Likely consult lens(es) |
+|----------|-------------------------|
+| 1. Problem | `consult-product` |
+| 2. Current alternatives | `consult-product`, `consult-gtm` |
+| 3. Hidden capability | `consult-product`, `consult-tech-apple` |
+| 4. Scope boundary | `consult-product` |
+| 5. Kill condition | `consult-product`, `consult-business` |
+| 6. Measurement | `consult-product`, `consult-gtm`, `consult-business` |
+| 7. iOS/macOS platform fit | `consult-tech-apple`, `consult-tech` |
+| 8. Apple framework leverage | `consult-tech-apple` |
+
+When the user returns with consult `response-*` artifacts in `.research/consult/`, resume by re-reading this skill's exploration document plus the new responses, absorb the tradeoff structure into the relevant track in the Progress Ledger, and re-pose the question with options now accompanied by their tradeoff axis. The decision still belongs to the user.
 
 ---
 
