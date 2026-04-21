@@ -31,6 +31,12 @@ Pure-function units. Invoked as `/skill-name`.
 | `ios-macos-app-idea-explore` | ios-macos-app | Iteratively crystallize an iOS or macOS app concept through Socratic interview |
 | `spec-acceptance-criteria-derive` | spec | Derive Given/When/Then acceptance criteria from a PRD or written spec |
 | `spec-ci-gates-scaffold` | spec | Scaffold a fast-to-slow CI quality-gate set from an AC list and stack notes |
+| `consult-product` | consult | Product-strategy lens — metrics, segmentation, prioritization, JTBD |
+| `consult-gtm` | consult | Go-to-market lens — pricing, channels, retention tactics, positioning |
+| `consult-ux` | consult | UX lens — interaction, information density, accessibility, research methodology |
+| `consult-tech` | consult | General tech lens — stack selection, architecture, build-vs-buy (non-Apple) |
+| `consult-business` | consult | Business-model lens — revenue model, unit economics, pricing power |
+| `consult-tech-apple` | consult | Apple-platform tech lens — iOS/macOS, Apple frameworks, MAS vs direct |
 
 ## Recipes
 
@@ -39,6 +45,7 @@ Composition patterns. Read by a human (or orchestrating agent); not symlinked.
 | Name | Uses | Purpose |
 |------|------|---------|
 | [`spec-to-gates`](recipes/spec-to-gates.md) | `spec-acceptance-criteria-derive`, `spec-ci-gates-scaffold` | Turn a PRD into AC list + CI gates, ready for TDD + eval iteration |
+| [`consult-fan-out`](recipes/consult-fan-out.md) | `consult-product`, `consult-gtm`, `consult-ux`, `consult-tech`, `consult-business`, `consult-tech-apple` | Spawn one or more consult lenses in parallel when a main skill hits a decision the user cannot evaluate alone |
 
 ## Authoring a new skill or recipe
 
