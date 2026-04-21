@@ -112,11 +112,12 @@ If the user gives a vague answer, ask a **drilling follow-up**:
 
 Run both mechanical and semantic checks.
 
-**Mechanical** (via `scripts/eval-prd.sh {prd-path}`):
+**Mechanical** (via the companion script `eval-prd.sh` colocated with this SKILL.md — resolve the path by reading the symlink target of this skill's directory, e.g., `{repo}/skills/spec-prd-compose/eval-prd.sh`):
 - All required sections present and non-empty
 - Each functional requirement has `Trigger`, `Effect`, `Edge cases` subsections
 - Each success metric contains a measurable value AND a time horizon
 - `Out of scope` section has at least 3 items
+- Effect fields contain no vague verbs (`handles`, `works`, `supports`, `processes`, `manages`)
 
 **Semantic** (agent-evaluated 8-criterion checklist, adapted from abt `scope-checklist.yaml` for PRD context):
 

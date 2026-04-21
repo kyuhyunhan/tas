@@ -12,15 +12,17 @@ tas/
 ├── CLAUDE.md             # Project governance
 ├── README.md             # Project identity, skill and recipe catalog
 ├── setup                 # Install script (symlinks skills into ~/.claude/skills/)
-├── scripts/              # Companion scripts (mechanical eval, etc.) invoked by skills
 ├── skills/
 │   ├── skill.md.tmpl     # Authoring starter — copy into a new skill directory
 │   └── {domain}-{action}/
-│       └── SKILL.md      # Skill definition (pure function — atomic)
+│       ├── SKILL.md      # Skill definition (pure function — atomic)
+│       └── {companion}   # Optional: scripts or data files this skill alone uses
 └── recipes/
     ├── recipe.md.tmpl    # Authoring starter — copy to a new recipe file
     └── {name}.md         # Recipe definition (composition — chains skills)
 ```
+
+A skill's directory may contain companion files (scripts, reference data, fixtures) that only that skill uses. They travel with the skill via the symlink. Only promote a companion to a top-level directory when at least two skills share it — do not mint shared locations speculatively.
 
 ## Skill vs. recipe
 
