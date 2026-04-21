@@ -23,14 +23,26 @@ Skills install as symlinks from the repo into `~/.claude/skills/`. Editing a ski
 
 ## Skills
 
+Pure-function units. Invoked as `/skill-name`.
+
 | Name | Domain | Purpose |
 |------|--------|---------|
 | `ios-macos-app-market-research` | ios-macos-app | Conversational researcher for iOS and macOS desktop app markets |
 | `ios-macos-app-idea-explore` | ios-macos-app | Iteratively crystallize an iOS or macOS app concept through Socratic interview |
+| `spec-acceptance-criteria-derive` | spec | Derive Given/When/Then acceptance criteria from a PRD or written spec |
+| `spec-ci-gates-scaffold` | spec | Scaffold a fast-to-slow CI quality-gate set from an AC list and stack notes |
 
-## Authoring a new skill
+## Recipes
 
-See [CLAUDE.md](CLAUDE.md) for the skill format spec, naming conventions, artifact directory rules, and commit conventions.
+Composition patterns. Read by a human (or orchestrating agent); not symlinked.
+
+| Name | Uses | Purpose |
+|------|------|---------|
+| [`spec-to-gates`](recipes/spec-to-gates.md) | `spec-acceptance-criteria-derive`, `spec-ci-gates-scaffold` | Turn a PRD into AC list + CI gates, ready for TDD + eval iteration |
+
+## Authoring a new skill or recipe
+
+See [CLAUDE.md](CLAUDE.md) for skill/recipe format specs, naming conventions, artifact directory rules, and commit conventions.
 
 ## Inspiration
 
