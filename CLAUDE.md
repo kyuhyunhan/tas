@@ -12,6 +12,7 @@ tas/
 ├── CLAUDE.md             # Project governance
 ├── README.md             # Project identity, skill and recipe catalog
 ├── setup                 # Install script (symlinks skills into ~/.claude/skills/)
+├── scripts/              # Companion scripts (mechanical eval, etc.) invoked by skills
 ├── skills/
 │   ├── skill.md.tmpl     # Authoring starter — copy into a new skill directory
 │   └── {domain}-{action}/
