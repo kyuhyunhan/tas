@@ -29,6 +29,7 @@ Pure-function units. Invoked as `/skill-name`.
 |------|--------|---------|
 | `ios-macos-app-market-research` | ios-macos-app | Conversational researcher for iOS and macOS desktop app markets |
 | `ios-macos-app-idea-explore` | ios-macos-app | Iteratively crystallize an iOS or macOS app concept through Socratic interview |
+| `spec-prd-compose` | spec | Compose a complete PRD through iterative Q&A gated by a mechanical + semantic completeness checklist |
 | `spec-acceptance-criteria-derive` | spec | Derive Given/When/Then acceptance criteria from a PRD or written spec |
 | `spec-tech-scaffold` | spec | Scaffold a language/domain/system-specific tech spec from an AC artifact |
 | `spec-ci-gates-scaffold` | spec | Scaffold a fast-to-slow CI quality-gate set from an AC and a tech-spec artifact |

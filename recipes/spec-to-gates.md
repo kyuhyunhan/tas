@@ -28,7 +28,8 @@ version: 0.2.0
 ## Prerequisites
 
 - A written spec: PRD, RFC, feature doc, or user-story collection. Ink-on-page, not a verbal pitch.
-- (Optional) An idea-exploration doc from `/ios-macos-app-idea-explore` in `.research/ios-macos-app/` — if present, the tech-scaffold step will consume it for platform/framework context.
+  - **If no PRD exists yet** but you have an idea-exploration doc, run `/spec-prd-compose` first to produce one. It iterates with Q&A + an eval gate until the PRD meets the completeness checklist.
+- (Optional) An idea-exploration doc from `/ios-macos-app-idea-explore` in `.research/ios-macos-app/` — if present, `/spec-prd-compose` consumes it as starter context, and `/spec-tech-scaffold` consumes it for platform/framework context.
 - Write access to `.research/spec/` in the project root.
 
 ## Flow
@@ -90,6 +91,7 @@ A team spec'd a "team invitation" feature on top of an existing Node 20 + Postgr
 
 ## Variants
 
+- **Starting from idea-exploration (no PRD yet)** — run `/spec-prd-compose` first with the idea-exploration doc path. When its eval gate passes, its output becomes the input to step 1. Then follow the recipe normally.
 - **Fast path** — if the spec is a single-screen feature with < 5 behaviors, skip step 2 and step 4 reviews and iterate directly in step 6; the AC-vs-test alignment will surface problems fast.
 - **Reuse existing tech spec** — on a second feature in the same project, skip step 3 and pass the existing `tech-{project}-{date}.md` path to `spec-ci-gates-scaffold`. Refresh the tech spec only when stack changes.
 - **No integration infra** — pure library / CLI projects will have no `Key external services` in their tech spec, and the gates skill will drop `integration` and `e2e` automatically.
