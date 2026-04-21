@@ -13,7 +13,7 @@ description: >
   installing tools, running tests, or deriving ACs themselves. The
   skill proposes a gate specification; translating it to a concrete
   CI system is a downstream step the user owns.
-version: 0.1.0
+version: 0.2.0
 argument-hint: "[path to AC artifact] [stack notes: lang, test runner, CI]"
 disable-model-invocation: true
 metadata:
@@ -159,6 +159,18 @@ Items the user must decide before the gate set is production-ready:
 - Artifact is written.
 
 Stop there. Do NOT write CI config, install tools, or run anything.
+
+## Decision-point escape — when the user cannot pick threshold values
+
+Some threshold choices are judgment calls that trade off quality against delivery speed (e.g., coverage 70% vs 90%, build time ceiling 60s vs 300s, bundle size 400kb vs 800kb). If the user asks "which threshold should I pick?" and cannot evaluate the tradeoff alone, STOP on that threshold. Do NOT invent a number — leave the field as `TBD` in the artifact, and point the user to the [`consult-fan-out`](../../recipes/consult-fan-out.md) recipe with the likely lenses:
+
+| Threshold type | Likely consult lens(es) |
+|----------------|-------------------------|
+| Coverage level | `consult-tech` (risk vs. effort), `consult-product` (quality vs. speed) |
+| Build/bundle ceilings | `consult-tech` (architecture implications), `consult-ux` (if user-visible perf) |
+| Supply-chain severity | `consult-tech` (security posture), `consult-business` (breach cost) |
+
+When the user returns with `response-*` artifacts, re-read the AC artifact plus the consult responses, resolve the `TBD` entries in the gates document, and continue.
 
 ## Constraints
 
