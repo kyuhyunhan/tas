@@ -8,15 +8,17 @@ All files and documents must be written in English.
 
 ```
 tas/
-├── ETHOS.md           # Foundational spirit behind the skill set
-├── CLAUDE.md          # Project governance
-├── README.md          # Project identity, skill and recipe catalog
-├── setup              # Install script (symlinks skills into ~/.claude/skills/)
+├── ETHOS.md              # Foundational spirit behind the skill set
+├── CLAUDE.md             # Project governance
+├── README.md             # Project identity, skill and recipe catalog
+├── setup                 # Install script (symlinks skills into ~/.claude/skills/)
 ├── skills/
+│   ├── skill.md.tmpl     # Authoring starter — copy into a new skill directory
 │   └── {domain}-{action}/
-│       └── SKILL.md   # Skill definition (pure function — atomic)
+│       └── SKILL.md      # Skill definition (pure function — atomic)
 └── recipes/
-    └── {name}.md      # Recipe definition (composition — chains skills)
+    ├── recipe.md.tmpl    # Authoring starter — copy to a new recipe file
+    └── {name}.md         # Recipe definition (composition — chains skills)
 ```
 
 ## Skill vs. recipe
@@ -30,22 +32,8 @@ If a new piece of work is itself atomic, it becomes a skill. If it only exists a
 
 ## Skill format
 
-Each skill lives in `skills/{name}/SKILL.md` with YAML frontmatter:
-
-```yaml
----
-name: skill-name
-description: >
-  When to invoke and when NOT to invoke.
-  This field is the resolver — it determines
-  whether Claude routes the user here.
-version: 0.1.0
-argument-hint: "[optional args hint]"
-disable-model-invocation: true
-metadata:
-  domain: ios-macos-app
----
-```
+Each skill lives in `skills/{name}/SKILL.md` with YAML frontmatter.
+Start from [`skills/skill.md.tmpl`](skills/skill.md.tmpl) — copy it into a new skill directory and fill in.
 
 Required fields:
 - `name` must match the directory name exactly.
@@ -65,18 +53,8 @@ Prefix skills with their domain: `{domain}-{action}`. Example: `ios-macos-app-ma
 
 ## Recipe format
 
-Each recipe lives in `recipes/{name}.md` with YAML frontmatter:
-
-```yaml
----
-name: recipe-name
-description: One-line — the problem this recipe solves and its shape
-uses:
-  - skill-name-a
-  - skill-name-b
-version: 0.1.0
----
-```
+Each recipe lives in `recipes/{name}.md` with YAML frontmatter.
+Start from [`recipes/recipe.md.tmpl`](recipes/recipe.md.tmpl) — copy it to a new recipe file and fill in.
 
 Required fields:
 - `name` must match the filename (without `.md`) exactly.
@@ -87,11 +65,9 @@ Required fields:
 Required sections (body): `## When to use`, `## Prerequisites`, `## Flow`, `## Failure modes`.
 Optional sections: `## Examples`, `## Variants`.
 
-Recipe naming: kebab-case describing the transformation, not the tool (`spec-to-gates`, not `gate-generator`). Recipes carry no domain prefix — composition crosses domains by nature.
-
 ## Recipe naming
 
-Describe the **transformation**, not the mechanism. `{input}-to-{output}` is the default pattern when a recipe has a clear directional shape (`spec-to-gates`, `bug-to-fix`). Other shapes are allowed when the transformation is not directional.
+Describe the **transformation**, not the mechanism. `{input}-to-{output}` is the default pattern when a recipe has a clear directional shape (`spec-to-gates`, `bug-to-fix`). Other shapes are allowed when the transformation is not directional. Recipes carry no domain prefix — composition crosses domains by nature.
 
 ## Terminology
 

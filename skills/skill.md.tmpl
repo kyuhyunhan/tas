@@ -1,0 +1,62 @@
+---
+name: skill-name
+description: >
+  When to invoke and when NOT to invoke.
+  This field is the resolver — its quality determines whether
+  Claude routes the user here. State the purpose, the input shape,
+  the output shape, and the clear anti-indicators.
+version: 0.1.0
+argument-hint: "[optional args hint]"
+disable-model-invocation: true
+metadata:
+  domain: {domain-prefix}
+---
+
+# {skill-name}
+
+{One-line description of the transformation this skill performs.}
+
+This skill {verb}s. It does not {verb}.
+- {what it does not do — rule 1}
+- {what it does not do — rule 2}
+- {what it does not do — rule 3}
+
+## Scope
+
+**In scope**:
+- {concrete case 1}
+- {concrete case 2}
+
+**Out of scope**:
+- {concrete case 1 — and where to go instead}
+- {concrete case 2 — and where to go instead}
+
+## Input
+
+{What the user provides. If missing, ask for it — do not guess.}
+
+## Process
+
+{Numbered steps. Each step should be a pure, deterministic
+transformation or an explicit STOP gate for user input. Avoid
+branching workflows — split into multiple skills or push the
+workflow into a recipe.}
+
+1. **{Step name}** — {what the skill does in this step}
+2. **{Step name}** — {...}
+
+## Artifact
+
+{Path and template for the artifact this skill writes.
+Default location: `.research/{domain}/{type}-{keyword}-{YYYY-MM-DD}.md`.
+Overwrite the same file on re-runs; do not version.}
+
+## Stop conditions
+
+- {condition under which the skill considers its work complete}
+
+## Constraints
+
+- Do NOT {thing outside scope 1}.
+- Do NOT {thing outside scope 2}.
+- Output = {exact artifact type}, not a recommendation.
