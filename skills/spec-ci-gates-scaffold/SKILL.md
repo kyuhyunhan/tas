@@ -1,20 +1,20 @@
 ---
 name: spec-ci-gates-scaffold
 description: >
-  Scaffold a CI quality gate set from an acceptance criteria list and
-  a brief tech stack description. Produces a gates document ordered
+  Scaffold a CI quality gate set from an acceptance-criteria artifact
+  and a tech-spec artifact. Produces a gates document ordered
   fast-to-slow, no-infra-first, with threshold drafts the user can
-  tune. Pure transformation: reads the AC artifact and stack notes,
-  writes only the gates artifact.
-  Use when you have an AC list (typically from
-  spec-acceptance-criteria-derive) and want a deterministic evaluation
-  frame before writing tests.
+  tune. Pure transformation: reads both artifacts, writes one gates
+  artifact.
+  Use when AC artifact (from spec-acceptance-criteria-derive) and
+  tech-spec artifact (from spec-tech-scaffold) both exist, and a
+  deterministic evaluation frame is needed before writing tests.
   NOT for: writing actual CI YAML (GitHub Actions, GitLab CI, etc.),
-  installing tools, running tests, or deriving ACs themselves. The
-  skill proposes a gate specification; translating it to a concrete
-  CI system is a downstream step the user owns.
-version: 0.2.0
-argument-hint: "[path to AC artifact] [stack notes: lang, test runner, CI]"
+  installing tools, running tests, or deriving ACs / tech spec
+  themselves. The skill proposes a gate specification; translating
+  it to a concrete CI system is a downstream step the user owns.
+version: 0.3.0
+argument-hint: "[path to AC artifact] [path to tech-spec artifact]"
 disable-model-invocation: true
 metadata:
   domain: spec
@@ -33,22 +33,25 @@ This skill scaffolds. It does not execute.
 ## Scope
 
 **In scope**:
-- Projects with any language, any test runner, any CI system. Gate categories are universal; threshold drafts are informed by the stack.
+- Projects with any language, any test runner, any CI system. Gate categories are universal; threshold drafts are informed by the tech spec.
 - Any set of ACs expressed in Given/When/Then form — typically output of `spec-acceptance-criteria-derive` but any equivalent input works.
 
 **Out of scope**:
 - Writing GitHub Actions / GitLab CI / CircleCI YAML. This skill proposes the gate set; the user wires it into their CI.
 - Deriving ACs from specs — that is `spec-acceptance-criteria-derive`.
+- Deciding the tech stack itself — that is `spec-tech-scaffold`.
 - Auditing whether existing tests actually cover ACs — future `effect-verb-audit` skill.
 - Tuning thresholds against a live repo. Thresholds here are drafts.
 
 ## Input
 
 The user provides:
-1. A path to an AC artifact (or pasted AC list in the Given/When/Then form).
-2. Brief stack notes — at minimum: primary language, test framework, CI system. Optional: DB, external services, build tool.
+1. A path to an AC artifact (from `spec-acceptance-criteria-derive` or equivalent).
+2. A path to a tech-spec artifact (from `spec-tech-scaffold`) — read for `Language & runtime`, `Test framework`, `CI system`, `Deployment target`, `Architecture posture`.
 
-If stack notes are missing, ask one round of questions. Do not probe the codebase.
+If the tech-spec artifact is missing, stop and ask the caller to run `spec-tech-scaffold` first. Do NOT accept informal stack notes — the tech-spec artifact is the formal input, and using free-form text instead reintroduces the ambiguity this input change was meant to remove.
+
+If the tech-spec artifact has unresolved items in its `Open decisions` section, proceed but mark the affected gates as `TBD — blocked on tech-spec Open decision: {item}`.
 
 ## Gate categories
 
@@ -70,11 +73,12 @@ A project does not need every gate. Omit any gate that does not apply (e.g., no 
 
 ### Step 1 — Read inputs
 
-Read the AC artifact. Count ACs. Note feature ID(s), any `Open questions`. Read the stack notes.
+Read the AC artifact. Count ACs. Note feature ID(s), any `Open questions`.
+Read the tech-spec artifact. Extract: `Language & runtime`, `Test framework` (unit/integration/e2e), `CI system`, `Deployment target`, `Architecture posture`, and any `Open decisions`.
 
 ### Step 2 — Select applicable gates
 
-For each of the seven categories, decide: applicable or not applicable, based on the stack. A CLI tool with no server, no DB, no frontend might skip `build` (bundle) and `e2e` entirely.
+For each of the seven categories, decide: applicable or not applicable, based on the tech spec. A CLI tool with no server, no DB, no frontend (tech spec has no `Key external services` and deployment target is "binary distribution") skips `build` (bundle) and `e2e` entirely. If the tech-spec `Open decisions` block resolution of a gate, mark that gate `TBD — blocked on tech-spec Open decision: {item}`.
 
 ### Step 3 — Map ACs to gate layers
 
@@ -106,7 +110,8 @@ Write to `.research/spec/gates-{feature-slug}-{YYYY-MM-DD}.md`. Overwrite if sam
 # CI Gates: {feature name}
 Date: {YYYY-MM-DD}
 Source AC: {path to AC artifact}
-Stack: {language, test runner, CI, notable infra}
+Source tech spec: {path to tech-spec artifact}
+Stack summary: {language, test runner, CI — pulled from tech-spec artifact}
 
 ## Gate set
 
