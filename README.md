@@ -39,6 +39,11 @@ Pure-function units. Invoked as `/skill-name`.
 | `consult-tech` | consult | General tech lens — stack selection, architecture, build-vs-buy (non-Apple) |
 | `consult-business` | consult | Business-model lens — revenue model, unit economics, pricing power |
 | `consult-tech-apple` | consult | Apple-platform tech lens — iOS/macOS, Apple frameworks, MAS vs direct |
+| `swift-patterns` | swift | Swift language patterns — async/await, optional, error, memory, value/reference, Sendable/Actor |
+| `code-review` | — | Code review checklist and feedback conventions ([MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]) |
+| `coding-standards` | — | Language-agnostic coding standards — readability, consistency, explicitness, naming, structure |
+| `aws-serverless-patterns` | aws-serverless | AWS Lambda design — handler/service split, cold-start optimization, error layering, Secrets Manager |
+| `apple-platform-security` | apple-platform | Keychain, ATS, sandboxing, log masking, input-validation conventions for iOS/macOS |
 
 ## Recipes
 
