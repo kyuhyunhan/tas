@@ -31,7 +31,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FORGE_ROOT="${FORGE_ROOT:?FORGE_ROOT must be set; bind a forge first (/forge <product>)}"
 RESOLVE_DIR="$FORGE_ROOT/.claude/resolve"
 GATES_DIR="$SCRIPT_DIR/gates"
-AUTO_COMMIT_SCRIPT="$SCRIPT_DIR/auto-commit-repos.sh"
+# auto-commit-repos.sh lives in the bound forge, not in tas/scripts/.
+# Path convention: $FORGE_ROOT/.claude/scripts/lifecycle/auto-commit-repos.sh
+# (relocated 2026-05-16; prior location was .claude/scripts/auto-commit-repos.sh).
+# If a forge has neither, run_auto_commit's `-x` guard skips cleanly.
+AUTO_COMMIT_SCRIPT="$FORGE_ROOT/.claude/scripts/lifecycle/auto-commit-repos.sh"
 PHASE_STATE_FILE="$FORGE_ROOT/.claude/.phase-state.json"
 
 source "$SCRIPT_DIR/lib/read-yaml.sh"
