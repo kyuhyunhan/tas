@@ -1,5 +1,5 @@
 ---
-name: spec-acceptance-criteria-derive
+name: spec-ac
 description: >
   Derive Given/When/Then acceptance criteria from a PRD, user story,
   RFC, or written product spec. Produces a structured AC document

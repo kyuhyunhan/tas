@@ -1,5 +1,5 @@
 ---
-name: aws-serverless-patterns
+name: ref-aws-patterns
 description: AWS Lambda design patterns — handler/service separation, cold-start optimization (lazy clients, bundle minification), layered error classes, central error handler, Secrets Manager with TTL cache, third-party API integration. Invoke when designing or reviewing AWS Lambda code. Do NOT invoke for non-AWS serverless (Cloudflare Workers, Vercel functions) or for non-serverless backends.
 version: 1.0.0
 metadata:

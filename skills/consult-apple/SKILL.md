@@ -1,5 +1,5 @@
 ---
-name: consult-tech-apple
+name: consult-apple
 description: >
   Apple-platform technology lens consultation for a decision point
   raised by a main skill. Applies Apple framework, Human Interface

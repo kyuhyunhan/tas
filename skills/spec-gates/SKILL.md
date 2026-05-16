@@ -1,5 +1,5 @@
 ---
-name: spec-ci-gates-scaffold
+name: spec-gates
 description: >
   Scaffold a CI quality gate set from an acceptance-criteria artifact
   and a tech-spec artifact. Produces a gates document ordered

@@ -1,5 +1,5 @@
 ---
-name: swift-patterns
+name: ref-swift-patterns
 description: Swift language patterns — async/await, optional handling, error handling, memory management, value vs. reference types, Sendable/Actor. Invoke when writing or reviewing Swift code on any Apple platform. Do NOT invoke for non-Swift code or for Apple framework specifics (HIG, AppKit, SwiftUI navigation, etc.) — those belong elsewhere.
 version: 1.0.0
 metadata:

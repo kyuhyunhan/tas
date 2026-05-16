@@ -1,5 +1,5 @@
 ---
-name: ios-macos-app-idea-explore
+name: ideate-app
 description: >
   Ideation-phase skill for crystallizing iOS or macOS app concepts.
   Iteratively refines an idea through forcing questions, assumption

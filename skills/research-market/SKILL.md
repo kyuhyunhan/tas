@@ -1,5 +1,5 @@
 ---
-name: ios-macos-app-market-research
+name: research-market
 description: >
   Isolated conversational researcher for the iOS and macOS desktop app market.
   Discusses App Store landscape, WWDC announcements, framework adoption,

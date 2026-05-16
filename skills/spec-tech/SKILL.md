@@ -1,5 +1,5 @@
 ---
-name: spec-tech-scaffold
+name: spec-tech
 description: >
   Scaffold a language/domain/system-specific tech spec document
   from an acceptance-criteria artifact and optional idea-exploration

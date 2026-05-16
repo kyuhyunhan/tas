@@ -1,5 +1,5 @@
 ---
-name: spec-prd-compose
+name: spec-prd
 description: >
   Compose a complete PRD through iterative Q&A with a built-in
   eval gate. Reads an optional idea-exploration doc as starter

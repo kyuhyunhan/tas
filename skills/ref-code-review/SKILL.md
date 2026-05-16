@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: ref-code-review
 description: Code review checklist and feedback conventions — feedback prefixes ([MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]), review checklist by area, anti-patterns, response-time guidance. Invoke when reviewing a PR or diff. Do NOT invoke for code authoring or static analysis tasks.
 version: 1.0.0
 ---

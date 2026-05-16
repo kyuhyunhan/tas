@@ -1,5 +1,5 @@
 ---
-name: coding-standards
+name: ref-code-standards
 description: Language-agnostic coding standards — three principles (Readability First, Consistency, Explicit over Implicit), naming conventions, code structure rules, comment guidance, and forbidden patterns (force-unwrap, magic numbers, god object). Invoke when writing or reviewing code on any project. Do NOT invoke for language-specific patterns — those belong in language-specific skills (e.g., swift-patterns).
 version: 1.0.0
 ---

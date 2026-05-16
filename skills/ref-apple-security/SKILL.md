@@ -1,5 +1,5 @@
 ---
-name: apple-platform-security
+name: ref-apple-security
 description: Apple-platform security guidelines — Keychain for sensitive client data, App Transport Security, sandboxing and entitlements, log masking, input validation at the boundary. Invoke when designing or reviewing security-sensitive code on iOS/macOS. Do NOT invoke for server-side security (use a server-security skill) or for cryptographic primitive selection.
 version: 1.0.0
 metadata:
