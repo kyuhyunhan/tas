@@ -35,8 +35,8 @@ fi
 if [[ "${1:-}" == "--agents" ]]; then
     AGENTS_YAML="$RESOLVE_DIR/agents.yaml"
     echo "=== Allowed agents ==="
-    for a in $(read_yaml_keys "$AGENTS_YAML" "agents"); do
-        when=$(read_yaml "$AGENTS_YAML" "agents.${a}.when")
+    for a in $(read_yaml_keys "$AGENTS_YAML" "allowed"); do
+        when=$(read_yaml "$AGENTS_YAML" "allowed.${a}.when")
         printf "  %-26s %s\n" "$a" "$when"
     done
     exit 0
