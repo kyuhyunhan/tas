@@ -24,7 +24,10 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FORGE_ROOT="${FORGE_ROOT:?FORGE_ROOT must be set; bind a forge first (/forge <product>)}"
 export FORGE_ROOT
-export WORKDIR="${WORKDIR:-$(awk "/^workdir:/{print \$2}" "$FORGE_ROOT/profile.yaml")}"
+# Post forge phase-1b-3: profile.yaml uses ${WORKDIR} env-template, so parsing
+# the file as a fallback would yield the literal string. Require WORKDIR to
+# be set by the env (settings.local.json or shell rc).
+export WORKDIR="${WORKDIR:?WORKDIR must be set; configure in settings.local.json or shell rc}"
 
 AUDIT_YAML="$FORGE_ROOT/.claude/resolve/audit.yaml"
 
