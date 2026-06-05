@@ -56,10 +56,11 @@ content, principle/learning curation, OAuth (atelier uses loopback + bearer).
    ```bash
    claude mcp add atelier --transport http \
      --url http://127.0.0.1:7322/mcp \
-     --header "Authorization: Bearer $(grep -m1 -oE 'Bearer-token=.*' ~/.atelier/secrets/.env | cut -d= -f2-)"
+     --header "Authorization: Bearer $(grep -m1 '^ATELIER_MCP_HTTP_TOKEN=' ~/.atelier/secrets/.env | cut -d= -f2-)"
    ```
-   (Adjust the key name to whatever atelier writes in its secrets file; the
-   value is read at call time and never persisted by this skill.)
+   The bearer's env key is `ATELIER_MCP_HTTP_TOKEN` (atelier's
+   `service.mcp_http.token_env`, default `ATELIER_MCP_HTTP_TOKEN`). The value is
+   read at call time and never persisted by this skill.
 5. **Verify.** Confirm the `atelier_*` tools resolve in a new session (e.g.
    `atelier_recall` is callable). Report the registered URL and that the token
    was sourced, not stored.
