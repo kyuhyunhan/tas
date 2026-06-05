@@ -8,61 +8,50 @@ shaped by actual workflow, borrowed from good ideas elsewhere.
 
 The point is not to use these skills. The point is to build your own.
 
+TAS is the **skills layer of the atelier constellation**: `atelier` is the engine
+(a memory/knowledge MCP server), the vault is the content, and TAS holds the
+skills. It connects to atelier the way [gstack](https://github.com/garrytan/gstack)
+connects to [gbrain](https://github.com/garrytan/gbrain) — over MCP, one-directional,
+owned by the skills side. See [USING_ATELIER_WITH_TAS.md](USING_ATELIER_WITH_TAS.md).
+
+## What earns a place here
+
+> Claude already knows how to code and reason. A skill that restates what the
+> model would do by default adds context without adding value.
+
+So TAS stays small on purpose. A skill exists only when it **pushes the model
+out of its default behavior** — an operational guardrail, an org-specific
+convention, or a procedure the model would not assemble on its own. Generic
+"lenses" and reference knowledge the base model already has are deliberately
+*not* here.
+
+## Skills
+
+Pure-function units, installed as symlinks, invoked as `/skill-name`. Grouped by
+the [Anthropic skill taxonomy](https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills).
+
+| Skill | Category | Purpose |
+|---|---|---|
+| `ship-pr` | CI/CD & deployment | Drive a finished change through push → PR → reviewer loop → auto-merge. |
+| `audit-diff` | Code quality & review | Audit a diff into `[MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]` findings; the rubric `ship-pr`'s reviewer follows. |
+| `setup-atelier` | Infrastructure ops | Register atelier's MCP server so a session can recall the vault. |
+
 ## Installation
 
 ```bash
 git clone git@github.com:kyuhyunhan/tas.git
 cd tas
-./setup           # install or refresh all skills
+./setup           # symlink all skills into ~/.claude/skills/
 ./setup --sync    # pull latest + refresh + prune dangling
 ./setup --list    # status per skill
 ./setup --help    # all flags
 ```
 
-Skills install as symlinks from the repo into `~/.claude/skills/`. Editing a skill in the repo takes effect immediately.
+Editing `skills/{name}/SKILL.md` takes effect immediately — the symlink points
+to the live repo.
 
-## Skills
+## Authoring
 
-Pure-function units. Invoked as `/skill-name`.
-
-| Name | Domain | Purpose |
-|------|--------|---------|
-| `ios-macos-app-market-research` | ios-macos-app | Conversational researcher for iOS and macOS desktop app markets |
-| `ios-macos-app-idea-explore` | ios-macos-app | Iteratively crystallize an iOS or macOS app concept through Socratic interview |
-| `spec-prd-compose` | spec | Compose a complete PRD through iterative Q&A gated by a mechanical + semantic completeness checklist |
-| `spec-acceptance-criteria-derive` | spec | Derive Given/When/Then acceptance criteria from a PRD or written spec |
-| `spec-tech-scaffold` | spec | Scaffold a language/domain/system-specific tech spec from an AC artifact |
-| `spec-ci-gates-scaffold` | spec | Scaffold a fast-to-slow CI quality-gate set from an AC and a tech-spec artifact |
-| `consult-product` | consult | Product-strategy lens — metrics, segmentation, prioritization, JTBD |
-| `consult-gtm` | consult | Go-to-market lens — pricing, channels, retention tactics, positioning |
-| `consult-ux` | consult | UX lens — interaction, information density, accessibility, research methodology |
-| `consult-tech` | consult | General tech lens — stack selection, architecture, build-vs-buy (non-Apple) |
-| `consult-business` | consult | Business-model lens — revenue model, unit economics, pricing power |
-| `consult-tech-apple` | consult | Apple-platform tech lens — iOS/macOS, Apple frameworks, MAS vs direct |
-| `swift-patterns` | swift | Swift language patterns — async/await, optional, error, memory, value/reference, Sendable/Actor |
-| `code-review` | — | Code review checklist and feedback conventions ([MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]) |
-| `coding-standards` | — | Language-agnostic coding standards — readability, consistency, explicitness, naming, structure |
-| `aws-serverless-patterns` | aws-serverless | AWS Lambda design — handler/service split, cold-start optimization, error layering, Secrets Manager |
-| `apple-platform-security` | apple-platform | Keychain, ATS, sandboxing, log masking, input-validation conventions for iOS/macOS |
-
-## Recipes
-
-Composition patterns. Read by a human (or orchestrating agent); not symlinked.
-
-| Name | Uses | Purpose |
-|------|------|---------|
-| [`spec-to-gates`](recipes/spec-to-gates.md) | `spec-acceptance-criteria-derive`, `spec-ci-gates-scaffold` | Turn a PRD into AC list + CI gates, ready for TDD + eval iteration |
-| [`consult-fan-out`](recipes/consult-fan-out.md) | `consult-product`, `consult-gtm`, `consult-ux`, `consult-tech`, `consult-business`, `consult-tech-apple` | Spawn one or more consult lenses in parallel when a main skill hits a decision the user cannot evaluate alone |
-
-## Authoring a new skill or recipe
-
-See [CLAUDE.md](CLAUDE.md) for skill/recipe format specs, naming conventions, artifact directory rules, and commit conventions.
-
-## Inspiration
-
-The architecture follows the "Thin Harness, Fat Skills" principle
-described in [Garry Tan's essay](https://github.com/garrytan/gbrain/blob/master/docs/ethos/THIN_HARNESS_FAT_SKILLS.md).
-
-## Philosophy
-
-See [ETHOS.md](ETHOS.md).
+See [CLAUDE.md](CLAUDE.md) for the skill format, naming, and the bar a new skill
+must clear. Philosophy: [ETHOS.md](ETHOS.md). Inspiration: Garry Tan's
+"Thin Harness, Fat Skills."

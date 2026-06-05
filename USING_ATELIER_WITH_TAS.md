@@ -9,7 +9,7 @@ connection over MCP, owned entirely by the skills side.
    TAS  (skills / harness)            atelier  (engine / brain)         vault (content)
    ─────────────────────             ──────────────────────           ──────────────
    /setup-atelier   ───────MCP──────▶  atelier serve  ──reads/writes──▶  markdown
-   /ship-pr, /spec-*, /consult-*       (HTTP, loopback,                  (truth;
+   /ship-pr  /audit-diff               (HTTP, loopback,                  (truth;
    …pure-function skills               bearer)                            DB is a
    that call atelier's tools           atelier_recall/search/…           projection)
 ```
@@ -62,7 +62,7 @@ codebase), atelier's projection is self-healing, so TAS ships **no**
 atelier serve --http            # loopback HTTP MCP on :7322
 
 # 2. TAS (skills) — install the skill set, then connect
-cd ta-set/tas && ./setup        # symlink skills into ~/.claude/skills
+cd tas && ./setup               # symlink skills into ~/.claude/skills
 # then, in a Claude Code session:
 /setup-atelier                  # register atelier's MCP server
 ```

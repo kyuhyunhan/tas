@@ -1,57 +1,53 @@
 ---
 name: audit-diff
-description: Read-only audit of a code diff. Categorizes findings as [MUST] / [SHOULD] / [NIT] / [Q] / [PRAISE]. Internalized by the reviewer agent when the master delegates "review the diff". The forge's review.yaml declares the review areas to assess.
+description: >-
+  Read-only audit of a code diff. Categorizes every finding as [MUST] /
+  [SHOULD] / [NIT] / [Q] / [PRAISE] with file:line references. Invoke when
+  reviewing a diff or PR — directly, or as the rubric the reviewer subagent
+  follows (e.g. from ship-pr). Do NOT use to author code, apply fixes, or merge
+  — findings are advisory; the caller decides.
 ---
 
-# Audit Diff
+# audit-diff
 
-Reviewer-attached procedure. When you (reviewer) receive a diff to audit, follow this procedure.
+A review **rubric + procedure**. Given a diff, produce categorized, actionable
+findings. The value here is not "how to review" (the model knows that) — it is
+the **fixed severity vocabulary** below, so findings are triaged consistently
+and a caller (human or the `ship-pr` loop) can act on them mechanically.
+
+This skill **audits**. It does not:
+- apply fixes (delegate the fix back to the author)
+- approve or merge (findings are advisory; the caller decides)
+- run tests as an end in itself (test execution only as evidence for a finding)
 
 ## Procedure
 
-**Step 0 — Resolve review areas:**
-
-```bash
-$TAS_ROOT/scripts/resolve.sh review --forge $FORGE_ROOT
-```
-
-The forge's `resolve/workflows/review.yaml` lists the areas to assess (e.g., architecture, coding standards, stack patterns, security, test coverage — exact list is forge-specific).
-
-**Step 1 (Inventory)** — Establish the diff range:
-
-```bash
-git -C $WORKDIR status --short
-git -C $WORKDIR diff
-```
-
-Confirm with the master which range to audit (uncommitted, staged, specific commits, or a PR number).
-
-**Step 2 (Verify)** — Run the relevant tests on the diff. If tests don't exist for the new behavior, that itself is a `[MUST]` or `[SHOULD]` finding depending on the forge's policy.
-
-**Step 3 (Audit each area)** in the order declared by `review.yaml`. Quote file paths with line numbers. Cross-reference attached refs:
-- `ref-code-review` for the checklist.
-- `ref-code-standards` for project-agnostic standards.
-- Stack-patterns ref (attached by forge) for stack-specific style.
-- `ref-apple-security` (when attached) for Apple-platform security posture.
-
-**Step 4 (Report)** — Group findings by severity. Recommend disposition per item.
+1. **Inventory** — establish the diff range and confirm it with the caller:
+   ```bash
+   git -C "$WORKDIR" status --short
+   git -C "$WORKDIR" diff <range>        # uncommitted, staged, a commit range, or main...HEAD
+   ```
+2. **Gather invariants** — read the project's `CLAUDE.md` / architecture docs for
+   the rules a reviewer must enforce (layering, security posture, "no X in Y").
+   The caller may also pass invariants directly (ship-pr does).
+3. **Verify** — run the tests touching the diff. Missing tests for new behavior
+   is itself a `[MUST]` or `[SHOULD]` finding.
+4. **Audit** the diff against: correctness, the gathered invariants, security,
+   readability, and test coverage. Quote `file:line` for every finding.
+5. **Report** — group findings by severity; recommend a disposition per item.
 
 ## Finding-severity vocabulary
 
-| Prefix | Meaning | Disposition recommendation |
+| Prefix | Meaning | Disposition |
 |---|---|---|
-| `[MUST]` | Apply before merge — correctness, security, hard-rule violation | apply |
-| `[SHOULD]` | Apply unless explicitly deferred — readability, pattern adherence, future-pain | apply (or defer with note) |
-| `[NIT]` | Surface; do not auto-apply — taste / micro-cleanup | surface only |
-| `[Q]` | Question for the author / master — assumption needs confirmation | answer first |
-| `[PRAISE]` | Note a particularly good choice — morale + reinforcement | include in summary |
+| `[MUST]` | Apply before merge — correctness, security, invariant violation | apply |
+| `[SHOULD]` | Apply unless explicitly deferred — readability, pattern, future-pain | apply or defer-with-reason |
+| `[NIT]` | Surface only — taste / micro-cleanup | surface |
+| `[Q]` | Question for the author — an assumption needs confirming | answer first |
+| `[PRAISE]` | A particularly good choice — reinforcement | include in summary |
 
-## What this skill does NOT do
+## Output
 
-- Apply fixes. The master delegates the fix back to the developer if needed.
-- Approve or merge PRs. Findings are advisory; the master decides.
-- Run standalone tests divorced from a review context. That is not your role; the master invokes the gate runner directly if pure test execution is needed.
-
-## Output to master
-
-Findings grouped by severity. For each item: file path with line number(s), the finding, the suggested change (when applicable), and disposition. Include at least one `[PRAISE]` when warranted.
+Findings grouped by severity. Per item: `file:line`, the finding, the suggested
+change (when applicable), and the disposition. Include at least one `[PRAISE]`
+when warranted. Be adversarial about `[MUST]` — prefer a real bug over a nit.
