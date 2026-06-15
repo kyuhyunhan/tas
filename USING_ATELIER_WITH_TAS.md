@@ -9,7 +9,7 @@ connection over MCP, owned entirely by the skills side.
    TAS  (skills / harness)            atelier  (engine / brain)         vault (content)
    ─────────────────────             ──────────────────────           ──────────────
    /atelier-setup   ───────MCP──────▶  atelier serve  ──reads/writes──▶  markdown
-   /ship-pr  /audit-diff               (HTTP, loopback,                  (truth;
+   /ship-pr  /atelier-consolidate      (HTTP, loopback,                  (truth;
    …pure-function skills               bearer)                            DB is a
    that call atelier's tools           atelier_recall/search/…           projection)
 ```

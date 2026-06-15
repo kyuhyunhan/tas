@@ -32,9 +32,10 @@ the [Anthropic skill taxonomy](https://claude.com/blog/lessons-from-building-cla
 
 | Skill | Category | Purpose |
 |---|---|---|
-| `ship-pr` | CI/CD & deployment | Drive a finished change through push → PR → reviewer loop → auto-merge. |
-| `audit-diff` | Code quality & review | Audit a diff into `[MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]` findings; the rubric `ship-pr`'s reviewer follows. |
+| `ship-pr` | CI/CD & deployment | Drive a finished change through push → PR → review loop → auto-merge (review rubric inlined). |
 | `atelier-setup` | Infrastructure ops | Register atelier's MCP server so a session can recall the vault. |
+| `atelier-consolidate` | Knowledge management | Background pipeline: promote candidates, dream principles (proposer/critic loop), reindex the vault. |
+| `skillify` | Meta / authoring | Turn a recurring workflow into a durable skill, gated against the bar. |
 
 ## Installation
 

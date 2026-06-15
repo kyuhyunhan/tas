@@ -61,9 +61,14 @@ Each skill is `skills/{name}/SKILL.md` with YAML frontmatter. Start from
 
 ## Skill naming
 
-Name by **function**, concisely — `ship-pr`, `audit-diff`, `atelier-setup`. No
-mandatory domain prefix; the category lives in `metadata.category` and the README
-grouping, not in a verbose name.
+Lowercase kebab-case; `name:` equals the directory. Two shapes:
+- **Area-scoped** (operates on one product/engine/domain): `<area>-<action>`, so
+  related skills cluster — `atelier-setup`, `atelier-consolidate`.
+- **Cross-cutting** (a general dev action): `<action>-<object>`, verb first —
+  `ship-pr`, `maintain-app-fe`.
+
+Coined verbs are allowed when idiomatic (`skillify`); avoid noun-`-er` agent
+nouns. `skillify` carries the authoritative version of this convention.
 
 ## Artifact convention
 
