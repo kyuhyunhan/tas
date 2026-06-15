@@ -71,6 +71,18 @@ Doing deterministic work in latent space is the bug skillify exists to kill.
 `~/.claude/skills/{name}/SKILL.md` directly using the frontmatter shape below.
 Either way, `name` matches the dir.
 
+**Naming convention** — lowercase kebab-case, and `name:` equals the directory.
+Pick one of two shapes:
+- **Area-scoped** (the skill operates on one product/engine/domain): `<area>-<action>`,
+  so related skills cluster in the list — e.g. `atelier-setup`, `atelier-consolidate`.
+- **Cross-cutting** (a general dev action, no single domain): `<action>-<object>`,
+  imperative verb first — e.g. `ship-pr`, `maintain-app-fe`.
+
+Use area-first only when the area is a clean noun other skills will share;
+otherwise default to verb-object. Established coined verbs are allowed when
+idiomatic and unambiguous (e.g. `skillify`). Avoid noun-`-er` agent nouns
+(`docs-syncer` → `sync-docs`) and vague single words.
+
 The `description` is the resolver — sharp triggers + clear anti-indicators, since
 its quality decides whether the skill ever routes. Keep the body lean; state what
 it does NOT do.
