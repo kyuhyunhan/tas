@@ -2,7 +2,8 @@
 name: ship-pr
 description: >-
   Ship a completed, tested change through the full review-to-merge loop: push,
-  open a PR, review with the reviewer subagent, iterate fixes until the
+  open a PR, review with an independent review subagent (general-purpose running
+  the audit-diff rubric), iterate fixes until the
   acceptance bar (zero [MUST] + [SHOULD]s triaged + tests green), then
   auto-merge. Invoke when the user says "ship this", "ship the PR", "open a PR
   and review it", "run the review loop", or has finished a feature with tests
@@ -14,12 +15,13 @@ description: >-
 
 Drives a finished, tested change through **push → PR → adversarial review loop →
 merge**, turning a one-off workflow into one invocation. The author and the
-reviewer are deliberately different agents: an independent adversary reviews the
-diff, and the change does not merge until it clears an explicit bar.
+reviewer are deliberately different agents: an independent review subagent
+(`general-purpose` running the `audit-diff` rubric) audits the diff, and the
+change does not merge until it clears an explicit bar.
 
 This skill **ships finished work**. It does not:
 - finish or write the work (arrive with the change complete and tests green)
-- decide the change is good — the reviewer subagent does, against the bar below
+- decide the change is good — the review subagent does, against the bar below
 - merge a PR that has not cleared the acceptance bar
 
 ## Scope
@@ -29,7 +31,7 @@ applying [MUST] + agreed [SHOULD] fixes (TDD when logic changes), auto-merging
 once the bar is met, post-merge sync.
 
 **Out of scope**: implementing the feature, product/spec decisions, a
-review-only pass (use the reviewer directly), shipping with red tests.
+review-only pass (use `audit-diff` directly), shipping with red tests.
 
 ## Acceptance bar (the gate)
 
@@ -52,8 +54,9 @@ escalate with the open findings — never merge a non-converged PR.
 3. **Review loop** (max 3 rounds):
    - read the project's `CLAUDE.md` / arch docs for the invariants a reviewer
      must enforce;
-   - spawn the **reviewer** subagent (read-only) on `git diff <default>...HEAD`
-     with the intent + invariants; require findings tagged
+   - spawn an independent review subagent — `general-purpose` running the
+     `audit-diff` rubric (read-only) — on `git diff <default>...HEAD` with the
+     intent + invariants; require findings tagged
      `[MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]` with `file:line`;
    - fix [MUST] + accepted [SHOULD] (TDD when logic changes); suite green;
    - commit (Conventional, no AI co-author) + push; re-review.
@@ -69,7 +72,7 @@ escalate with the open findings — never merge a non-converged PR.
 - **On the default branch** → branch first; never PR from `main`.
 - **CI pending** → wait/poll; never merge on an unknown state.
 - **CI red / merge conflict** → escalate, do not merge.
-- **Reviewer finds a real bug late** → fix it TDD; the bug leaves a test behind
+- **Review finds a real bug late** → fix it TDD; the bug leaves a test behind
   so it cannot recur.
 - **Non-convergence** (still [MUST] after 3 rounds) → escalate with open findings.
 - **Local-only repo** (no remote) → stop at preflight; this skill needs a PR.
