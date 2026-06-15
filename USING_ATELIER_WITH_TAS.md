@@ -8,7 +8,7 @@ connection over MCP, owned entirely by the skills side.
 ```
    TAS  (skills / harness)            atelier  (engine / brain)         vault (content)
    ─────────────────────             ──────────────────────           ──────────────
-   /setup-atelier   ───────MCP──────▶  atelier serve  ──reads/writes──▶  markdown
+   /atelier-setup   ───────MCP──────▶  atelier serve  ──reads/writes──▶  markdown
    /ship-pr  /audit-diff               (HTTP, loopback,                  (truth;
    …pure-function skills               bearer)                            DB is a
    that call atelier's tools           atelier_recall/search/…           projection)
@@ -19,7 +19,7 @@ connection over MCP, owned entirely by the skills side.
 | | gstack | **TAS** | gbrain | **atelier** |
 |---|---|---|---|---|
 | role | workflow harness + skills | workflow skills | knowledge layer (MCP) | engine + vault projection (MCP) |
-| knows the other? | yes — ships `/setup-gbrain` | yes — ships `/setup-atelier` | **no** (agnostic) | **no** (agnostic) |
+| knows the other? | yes — ships `/setup-gbrain` | yes — ships `/atelier-setup` | **no** (agnostic) | **no** (agnostic) |
 | connection | MCP registration | MCP registration | exposes tools | exposes `atelier_*` tools |
 
 The asymmetry is the point: **atelier never references TAS**, exactly as gbrain
@@ -33,7 +33,7 @@ the connection so atelier can stay culture-neutral and distributable.
   (`http://127.0.0.1:7322/mcp`), authenticated by a **static bearer** in
   `~/.atelier/secrets/.env` (chmod 600, loopback-only — no OAuth needed for the
   single-user case).
-- TAS's **`/setup-atelier`** skill registers that server with Claude Code
+- TAS's **`/atelier-setup`** skill registers that server with Claude Code
   (`claude mcp add atelier …`), reading the bearer at call time and never
   persisting it. This is the analog of gstack's `/setup-gbrain`.
 - Once registered, any session can call `atelier_recall`, `atelier_search`,
@@ -44,7 +44,7 @@ the connection so atelier can stay culture-neutral and distributable.
 
 - **Loopback + bearer only.** atelier binds to `127.0.0.1`; the token authorizes
   local callers. The token is never copied into TAS (TAS is a **public** repo).
-- **No secrets in this repo.** `/setup-atelier` sources the token from
+- **No secrets in this repo.** `/atelier-setup` sources the token from
   `~/.atelier/secrets/.env` at registration time.
 
 ## Keeping current
@@ -64,7 +64,7 @@ atelier serve --http            # loopback HTTP MCP on :7322
 # 2. TAS (skills) — install the skill set, then connect
 cd tas && ./setup               # symlink skills into ~/.claude/skills
 # then, in a Claude Code session:
-/setup-atelier                  # register atelier's MCP server
+/atelier-setup                  # register atelier's MCP server
 ```
 
 After that, `atelier_*` tools resolve in every session, and TAS skills (e.g.

@@ -1,5 +1,5 @@
 ---
-name: setup-atelier
+name: atelier-setup
 description: >-
   Connect atelier — the personal memory/knowledge engine — to Claude Code by
   registering its MCP server, so any session can recall vault learnings and
@@ -9,7 +9,7 @@ description: >-
   the vault, or run a review loop — this skill only wires the connection.
 ---
 
-# setup-atelier
+# atelier-setup
 
 Registers atelier's MCP server with Claude Code, the way gstack's `setup-gbrain`
 wires gbrain in. atelier is the **engine** (a loopback MCP server over the

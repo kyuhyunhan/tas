@@ -34,7 +34,7 @@ the [Anthropic skill taxonomy](https://claude.com/blog/lessons-from-building-cla
 |---|---|---|
 | `ship-pr` | CI/CD & deployment | Drive a finished change through push → PR → reviewer loop → auto-merge. |
 | `audit-diff` | Code quality & review | Audit a diff into `[MUST]/[SHOULD]/[NIT]/[Q]/[PRAISE]` findings; the rubric `ship-pr`'s reviewer follows. |
-| `setup-atelier` | Infrastructure ops | Register atelier's MCP server so a session can recall the vault. |
+| `atelier-setup` | Infrastructure ops | Register atelier's MCP server so a session can recall the vault. |
 
 ## Installation
 

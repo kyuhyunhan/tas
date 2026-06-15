@@ -9,7 +9,7 @@ All files and documents must be written in English.
 TAS is the **skills layer of the atelier constellation** (engine = `atelier`,
 content = vault, skills = TAS). It holds *only* skills — no engine, no
 orchestration runtime, no cross-repo tooling. Connection to atelier lives
-entirely on this side via `setup-atelier` + `USING_ATELIER_WITH_TAS.md`; atelier
+entirely on this side via `atelier-setup` + `USING_ATELIER_WITH_TAS.md`; atelier
 itself never references TAS.
 
 ## The bar — what earns a skill
@@ -61,7 +61,7 @@ Each skill is `skills/{name}/SKILL.md` with YAML frontmatter. Start from
 
 ## Skill naming
 
-Name by **function**, concisely — `ship-pr`, `audit-diff`, `setup-atelier`. No
+Name by **function**, concisely — `ship-pr`, `audit-diff`, `atelier-setup`. No
 mandatory domain prefix; the category lives in `metadata.category` and the README
 grouping, not in a verbose name.
 
@@ -88,6 +88,6 @@ Conventional Commits. Scope `skills` for skill changes; `docs`/`chore` for meta.
 
 ```
 feat(skills): add ship-pr
-fix(skills): setup-atelier reads the real bearer key
+fix(skills): atelier-setup reads the real bearer key
 docs: regenerate the skill catalog
 ```

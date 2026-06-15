@@ -28,7 +28,7 @@ applies what clears the bar.
 
 ## Procedure (when triggered)
 1. **Preflight** — ToolSearch for `atelier_doctor`; if the atelier MCP tools are
-   not reachable, STOP and tell the user to connect atelier (see `setup-atelier`).
+   not reachable, STOP and tell the user to connect atelier (see `atelier-setup`).
 2. **Launch the background Workflow** (skill-invocation = explicit Workflow opt-in):
    ```
    Workflow({ scriptPath: "/Users/kyuhyunhan/.claude/skills/atelier-consolidate/consolidate.workflow.js" })
