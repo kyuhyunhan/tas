@@ -122,6 +122,35 @@ specific slug and leave the others.
     beats the background 30s auto-commit poller, which would otherwise sweep the
     change under a generic message).
 
+## Hardening (verified on first real runs)
+
+Concrete facts the engine enforces — get these right up front:
+
+- **Reindex space is `vault-builder`.** The whole gorae vault (graph/ + provenance/) is
+  indexed under the space label `vault-builder`, NOT `gorae` or `vault-librarian`
+  (counterintuitive, since graph/ is librarian territory). `pages.slug` is the
+  space-relative path and is *globally* UNIQUE — targeting the wrong space label
+  collides. Use `atelier_reindex --space vault-builder`. Same label for `atelier_lint`.
+- **Quote dates as strings.** `created`/`updated`/`first_mention` MUST be quoted
+  (`created: "2026-06-16"`), else YAML parses a date object and `atelier_validate`
+  FAILs with `V0: must be string, got date`.
+- **Path resolution differs per tool.** `atelier_prepare_commit` resolves paths
+  vault-relative; `atelier_validate` resolves against CWD — pass it ABSOLUTE paths.
+- **entry_id is deterministic** = `uuid5(NAMESPACE_DNS, "atelier:" + space-relative-path)`.
+  Compute it directly for new wiki pages (don't rely on PENDING resolution reaching graph/).
+  When UPDATING an existing page, preserve its existing entry_id.
+- **The 30s auto-commit poller usually wins.** A multi-step ingest spans more than
+  30s, so the poller commits the work under a generic `chore(vault): sync` message
+  before an explicit `atelier_sync` can. That's acceptable (changes land + push); only
+  reach for an explicit commit if a semantic message is essential and you can beat the window.
+- **`_new/` must survive even when empty.** It carries a `.gitkeep`; never `git rm` the
+  last file such that the dir is pruned, and never `rmdir` it. If you discard a rejected
+  staged file, leave the dir (and its `.gitkeep`) in place.
+- **L3 source_count is semantic, not a backlink count.** `source_count` = number of
+  *source pages* referencing an entity. atelier's L3 lint reports `actual` = total inbound
+  backlinks (much higher), so an L3 WARN is expected and systemic across the vault — do
+  NOT run the L3 `--fix`, which would stamp the backlink count.
+
 ## Constraints
 
 - Do NOT edit `provenance/` content — raw is immutable; corrections live in the
