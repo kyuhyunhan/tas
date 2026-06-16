@@ -114,7 +114,7 @@ specific slug and leave the others.
    cross-refs; a domain concept that does not yet meet its source threshold →
    **mention in the source page, do not pre-create**. Cross-link existing related
    entities. Create **no** digest/theme/synthesis pages.
-9. **Project**: `atelier_reindex --space gorae`.
+9. **Project**: `atelier_reindex --space vault-builder` (see Hardening — NOT `gorae`).
 10. **Log**: append a line to `graph/log.md` (`## [YYYY-MM-DD] ingest | {summary}`).
 11. **Lint**: `atelier_lint` (auto: L1 broken-links, L3 source-count, L5 orphan,
     L6 stale). Review L2 (hallucination) and L7 (gap) manually.
