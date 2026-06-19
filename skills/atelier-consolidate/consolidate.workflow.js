@@ -209,7 +209,7 @@ if (!clusters.length) {
   // plus existing proactive claims are the candidate pool. distill is a field
   // transition (proactive→always) and only fires on claims currently at proactive.
   const distillPlan = await agent(
-    `${MCP} You are the T0 curator. The `always` budget is small and hard-capped
+    `${MCP} You are the T0 curator. The 'always' budget is small and hard-capped
      (recall keeps only the most relevant). From the proactive claims in these
      clusters ${JSON.stringify(clusters.map(c => c.source_claim_ids).flat())},
      nominate ONLY the few highest-value, broadly-applicable ones to distill into
