@@ -1,19 +1,19 @@
 ---
-name: vault-ingest
+name: atelier-atomize
 description: >-
   Ingest a knowledge source into the gorae vault as an atomic graph —
   optionally extracting one or more YouTube transcripts first, landing the raw
   Source in raw/<domain>/, then ATOMIZING it into Entity + Claim nodes under
   graph/atomic/ (deferring to the atelier engine as schema authority). Invoke
   when the user gives a YouTube link (or list) to ingest, says "이 영상/자료
-  적재해줘", "wiki에 넣어줘", "이 source atomize 해줘", or runs /vault-ingest.
+  적재해줘", "wiki에 넣어줘", "이 source atomize 해줘", or runs /atelier-atomize.
   With no link argument it atomizes a raw Source that has no derived Claim yet
   (the engine's atomize nudge counts them). Do NOT use for personal sources
   (diary, faith, writings — those stay private, human-only), to re-edit a Claim
   already minted, or for non-knowledge content.
 ---
 
-# vault-ingest
+# atelier-atomize
 
 Turns a knowledge source — a YouTube URL, or a raw document already in
 `raw/<domain>/` — into an **atomic graph** in the gorae vault: an immutable

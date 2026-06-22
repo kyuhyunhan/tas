@@ -10,7 +10,7 @@ description: >-
   up the atomic graph". Each utility is dry-run by default, lossless, and
   idempotent (a clean graph reports 0 changes). Do NOT use for promote/dream
   tier transitions (that is atelier-consolidate), for ingesting/atomizing a new
-  source (that is vault-ingest), or for a read-only recall/search query — this
+  source (that is atelier-atomize), or for a read-only recall/search query — this
   skill mutates node frontmatter and is a write operation, not a query.
 version: 0.1.0
 argument-hint: "[--apply] [--vault-root PATH]"
@@ -28,7 +28,7 @@ path; every fix is a pure function of the graph's own data.
 This skill **repairs**. It does not promote, ingest, or query.
 - does not perform promote/dream tier transitions on claims (that is
   `atelier-consolidate`)
-- does not ingest or atomize a new source into the graph (that is `vault-ingest`)
+- does not ingest or atomize a new source into the graph (that is `atelier-atomize`)
 - does not answer a recall/search question — it mutates frontmatter, so it is a
   write, never a read-only query
 

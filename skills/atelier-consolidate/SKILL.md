@@ -11,7 +11,7 @@ description: >-
   "make the vault consistent / consolidate my memory", or after a capture/atomize
   session that left query-tier claims or a stale projection behind. Do NOT use
   for a single capture, a read-only recall/search query, atomizing a new source
-  (use vault-ingest), or when the atelier MCP server is not connected.
+  (use atelier-atomize), or when the atelier MCP server is not connected.
 ---
 
 # atelier-consolidate
@@ -48,7 +48,7 @@ clusters generalize, the synthesis text).
   past the bar
 - does not write outside the vault; markdown stays the source of truth, the DB is
   reprojected from it
-- does not atomize new sources (that is `vault-ingest`) or proceed if atelier MCP
+- does not atomize new sources (that is `atelier-atomize`) or proceed if atelier MCP
   is unavailable — stop and say so
 
 ## Procedure (when triggered)
